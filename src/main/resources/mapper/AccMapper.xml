@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.blackjade.apm.dao.AccDao">
+
+	<select id="selectAccRow" resultType="com.blackjade.apm.domain.AccRow">
+		SELECT * FROM crm.cacc a WHERE a.CID=#{cid} AND a.PNSGID=#{pnsgid} AND a.PNSID=#{pnsid} FOR UPDATE		
+	</select>
+		
+	<update id="updatePubAccRow">
+		UPDATE crm.cacc SET MARGIN=#{margin},FREEMARGIN=#{freemargin} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
+	</update>
+
+</mapper>
