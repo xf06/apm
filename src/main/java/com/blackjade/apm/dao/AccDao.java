@@ -17,7 +17,10 @@ public interface AccDao {
 			@Param(value = "pnsid") int pnsid, @Param(value = "margin") long margin,
 			@Param(value = "freemargin") long freemargin);
 	
-	//
+	// update for deal
+	
+	
+	// update for 
 	
 	
 }

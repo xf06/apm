@@ -24,9 +24,18 @@ public class CDeal {
 
 	public DealStatus reviewData() {
 		
+		if(!this.messageid.equals("7003"))
+			return ComStatus.DealStatus.IN_MSG_ERR;
+		
+		if(('S'!=this.side)&&('B'!=this.side))
+			return ComStatus.DealStatus.IN_MSG_ERR;
+		
 		if(this.quant<=0)
 			return ComStatus.DealStatus.IN_QUANT_ERR;
 		
+		if(this.price<=0)
+			return ComStatus.DealStatus.IN_MSG_ERR;		
+				
 		if(this.pnsoid==null)
 			return ComStatus.DealStatus.IN_MSG_ERR;
 	

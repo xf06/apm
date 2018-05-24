@@ -2,21 +2,22 @@ package com.blackjade.apm.controller;
 
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import com.blackjade.apm.apis.CDeal;
 import com.blackjade.apm.apis.CDealAns;
+import com.blackjade.apm.apis.CPayConfirm;
+import com.blackjade.apm.apis.CPayConfirmAns;
 import com.blackjade.apm.apis.CPublish;
 import com.blackjade.apm.apis.CPublishAns;
 import com.blackjade.apm.apis.ComStatus;
+import com.blackjade.apm.apis.ComStatus.DealStatus;
+import com.blackjade.apm.apis.ComStatus.PayConfirmStatus;
 import com.blackjade.apm.apis.ComStatus.PublishStatus;
 import com.blackjade.apm.controller.service.ApmService;
 import com.blackjade.apm.dao.AccDao;
@@ -65,7 +66,6 @@ public class ApmController {
 			
 			ans = this.apms.publishApm(pub, ans); // if not ok just throw 			
 			if(ComStatus.PublishStatus.SUCCESS!=ans.getStatus()) {
-				ans.setStatus(st);
 				return ans;
 			}
 		}
@@ -81,14 +81,89 @@ public class ApmController {
 		return ans;
 	}	
 
-//	@RequestMapping(value = "/deal", method = RequestMethod.POST)
-//	@ResponseBody
-//	public CDealAns cQueryPublish(CDeal deal){
-//		
-//		CDealAns ans;
-//		
-//		return ans;
-//	}
+	@RequestMapping(value = "/deal", method = RequestMethod.POST)
+	@ResponseBody
+	public CDealAns cQueryDeal(@RequestBody CDeal deal){
+		
+		// check input 
+		DealStatus st = deal.reviewData(); 
+			
+		// construct reply ans 
+		CDealAns ans = new CDealAns(deal.getRequestid());
+		
+		ans.setClientid(deal.getClientid());		
+		ans.setPnsoid(deal.getPnsoid());		
+		ans.setPoid(deal.getPoid());
+		
+		ans.setPnsid(deal.getPnsid());
+		ans.setPnsgid(deal.getPnsgid());
+		
+		ans.setPrice(deal.getPrice());
+		ans.setQuant(deal.getQuant());
+		ans.setSide(deal.getSide());
+		// status and oid
+		
+		if(ComStatus.DealStatus.SUCCESS!=st) {
+			ans.setStatus(st);
+			return ans;
+		}
+		
+		// update apm and pub
+		try {
+			ans = this.apms.dealApm(deal, ans);
+			if(ComStatus.DealStatus.SUCCESS!=ans.getStatus()) {
+				return ans;
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			ans.setStatus(ComStatus.DealStatus.DATABASE_ERR);
+			return ans;			
+		}
+		
+		// everything ok successfully return
+		return ans;
+	}
+		
+	@RequestMapping(value = "/payconfirm", method = RequestMethod.POST)
+	@ResponseBody
+	public CPayConfirmAns cQueryPayConfirm(@RequestBody CPayConfirm cpaycon){
+		
+		// check status
+		PayConfirmStatus st = cpaycon.reviewData();
+		
+		CPayConfirmAns ans = new CPayConfirmAns(cpaycon.getRequestid());
+		
+		ans.setClientid(cpaycon.getClientid());
+		ans.setOid(cpaycon.getOid());
+		ans.setSide(cpaycon.getSide());
+		ans.setPnsgid(cpaycon.getPnsgid());
+		ans.setPnsid(cpaycon.getPnsid());
+		ans.setPrice(cpaycon.getPrice());
+		ans.setQuant(cpaycon.getQuant());
+		
+		// check status
+		if(ComStatus.PayConfirmStatus.STATUS_FINAL!=st) {
+			ans.setStatus(st);
+			return ans;
+		}
+		
+		// send payconfirm to pub
+		try {
+			ans = this.apms.dealApm(cpaycon, ans);
+		}
+		catch(Exception e) {
+			
+		}
+		
+		
+		// after payconfirm settle two accounts
+		
+		
+		
+		return ans;
+	} 
+	
 //
 //	@RequestMapping(value = "/cancel", method = RequestMethod.POST)
 //	@ResponseBody
