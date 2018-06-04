@@ -121,7 +121,7 @@ public class ApmController {
 			return ans;			
 		}
 		
-		// everything ok successfully return
+		// if everything ok return success
 		return ans;
 	}
 		
@@ -150,17 +150,18 @@ public class ApmController {
 		
 		// send payconfirm to pub
 		try {
-			ans = this.apms.dealApm(cpaycon, ans);
+			ans = this.apms.payconfirm(cpaycon, ans);
+			if(ComStatus.PayConfirmStatus.SUCCESS!=ans.getStatus()) {
+				return ans;
+			}
 		}
 		catch(Exception e) {
-			
-		}
+			e.printStackTrace();
+			ans.setStatus(ComStatus.PayConfirmStatus.PC_DATABASE_ERR);
+			return ans;
+		}		
 		
-		
-		// after payconfirm settle two accounts
-		
-		
-		
+		// if everything ok return success
 		return ans;
 	} 
 	

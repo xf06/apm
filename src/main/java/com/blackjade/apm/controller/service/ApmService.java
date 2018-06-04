@@ -1,5 +1,7 @@
 package com.blackjade.apm.controller.service;
 
+import java.util.UUID;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import com.blackjade.apm.apis.CPayConfirmAns;
 import com.blackjade.apm.apis.CPublish;
 import com.blackjade.apm.apis.CPublishAns;
 import com.blackjade.apm.apis.ComStatus;
+import com.blackjade.apm.apis.ComStatus.PayConfirmStatus;
 import com.blackjade.apm.dao.AccDao;
 import com.blackjade.apm.domain.AccRow;
 
@@ -208,11 +211,94 @@ public class ApmService {
 	public CPayConfirmAns payconfirm(CPayConfirm paycon, CPayConfirmAns ans) throws Exception{
 		
 		// send things to payconfirm
+		CPayConfirmAns payconans = null;
+		try {
+			payconans = this.rest.postForObject(this.url+"/payconfirm", payconans, CPayConfirmAns.class);
+			if (payconans == null) {
+				ans.setStatus(ComStatus.PayConfirmStatus.PUB_FAILED);
+				return ans;
+			}
+
+			// >> check return ans >>
+			if (ComStatus.PayConfirmStatus.SUCCESS!=payconans.getStatus()) {
+				throw new Exception(payconans.getStatus().toString());
+			}
+			
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e.getMessage());//exception handling
+		}
+						
+		// settle two accounts
 		
-		// how to deal with payconfirm
 		
+		int buycid = 0;
+		int sellcid = 0;
 		
+		long quant = paycon.getQuant();
 		
+		if('B'== paycon.getSide()){ //payconfirm is deal side
+		// dealer buy				
+		// publish sell
+			buycid = paycon.getClientid();
+			sellcid = paycon.getPoid();
+			
+		}
+		
+		if('S'== paycon.getSide()) {
+		// dealer sell
+		// publisher buy
+			sellcid = paycon.getClientid();
+			buycid = paycon.getPoid();
+		}
+		
+		if(('B'!= paycon.getSide())&&('S'!= paycon.getSide())) {
+			ans.setStatus(ComStatus.PayConfirmStatus.IN_MSG_ERR);
+			return ans;
+		}
+		
+			
+		AccRow buyacc = null;
+		AccRow sellacc = null;
+		try {
+			buyacc = this.acc.selectAccRow(buycid, paycon.getPnsgid(), paycon.getPnsid());
+			sellacc = this.acc.selectAccRow(sellcid, paycon.getPnsgid(), paycon.getPnsid());
+			if((buyacc==null)||(sellacc==null)){
+				ans.setStatus(ComStatus.PayConfirmStatus.DB_ACC_MISS);
+				return ans;
+			}
+		}
+		catch(Exception e) {
+			ans.setStatus(ComStatus.PayConfirmStatus.DB_ACC_MISS);
+			return ans;
+		}
+					
+		int retcode = 0;
+		try {				
+			retcode = this.acc.updateBSAccRow(buycid, paycon.getPnsgid(), paycon.getPnsid(), 
+					buyacc.getBalance()+quant, buyacc.getFreemargin()+quant, buyacc.getPnl()+quant);
+			if(retcode == 0) {
+				ans.setStatus(ComStatus.PayConfirmStatus.DB_ACC_MISS);;
+				return ans;
+			}
+							
+			retcode = this.acc.updateSSAccRow(sellcid, paycon.getPnsgid(), paycon.getPnsid(), 
+					sellacc.getBalance()-quant, sellacc.getMargin()-quant, buyacc.getPnl()-quant);
+			if(retcode == 0) {
+				throw new Exception(ComStatus.PayConfirmStatus.DB_ACC_MISS.toString());
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw new Exception(ComStatus.PayConfirmStatus.DB_ACC_MISS.toString());
+		}
+		
+		// A account publish sell side from margin sub quant -> pnl sub quant
+				
+		// B account deal buy side from 
+				
+		// how to deal with payconfirm				
 		
 		return ans;
 	} 

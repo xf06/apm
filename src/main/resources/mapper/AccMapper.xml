@@ -10,4 +10,12 @@
 		UPDATE crm.cacc SET MARGIN=#{margin},FREEMARGIN=#{freemargin} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
 	</update>
 
+	<update id="updateBSAccRow">
+		UPDATE crm.cacc SET BALANCE=#{balance},FREEMARGIN=#{freemargin},PNL=#{pnl} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
+	</update>
+	
+	<update id="updateSSAccRow">
+		UPDATE crm.cacc SET BALANCE=#{balance},MARGIN=#{margin},PNL=#{pnl} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
+	</update>
+
 </mapper>

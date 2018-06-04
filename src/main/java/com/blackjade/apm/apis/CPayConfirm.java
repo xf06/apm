@@ -24,6 +24,9 @@ public class CPayConfirm {
 	}
 
 	public PayConfirmStatus reviewData() {
+		if(!this.messageid.equals("7007"))
+			return ComStatus.PayConfirmStatus.WRONG_MSGID;
+		
 		return ComStatus.PayConfirmStatus.SUCCESS;
 	}
 
