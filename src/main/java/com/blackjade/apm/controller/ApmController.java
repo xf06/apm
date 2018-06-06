@@ -143,7 +143,7 @@ public class ApmController {
 		ans.setQuant(cpaycon.getQuant());
 		
 		// check status
-		if(ComStatus.PayConfirmStatus.STATUS_FINAL!=st) {
+		if(ComStatus.PayConfirmStatus.SUCCESS!=st) {
 			ans.setStatus(st);
 			return ans;
 		}

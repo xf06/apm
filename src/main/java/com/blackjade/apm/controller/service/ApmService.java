@@ -43,7 +43,7 @@ public class ApmService {
 	public CPublishAns publishApm(CPublish pub, CPublishAns ans) throws Exception {
 
 		
-		if('B'==pub.getSide()) {
+		if('S'==pub.getSide()) {
 				
 			// lock APM for update
 			AccRow accrow = null;
@@ -93,6 +93,12 @@ public class ApmService {
 			} catch (Exception e) {
 				throw new Exception(ComStatus.PublishStatus.ACC_DB_ERR.toString());
 			}
+		}else {
+			if('B'!=pub.getSide()) 
+			{
+				ans.setStatus(ComStatus.PublishStatus.IN_MSG_ERR);
+				return ans;
+			}				
 		}
 		
 		// update PnS
@@ -213,7 +219,7 @@ public class ApmService {
 		// send things to payconfirm
 		CPayConfirmAns payconans = null;
 		try {
-			payconans = this.rest.postForObject(this.url+"/payconfirm", payconans, CPayConfirmAns.class);
+			payconans = this.rest.postForObject(this.url+"/payconfirm", paycon, CPayConfirmAns.class);
 			if (payconans == null) {
 				ans.setStatus(ComStatus.PayConfirmStatus.PUB_FAILED);
 				return ans;
@@ -241,16 +247,16 @@ public class ApmService {
 		if('B'== paycon.getSide()){ //payconfirm is deal side
 		// dealer buy				
 		// publish sell
-			buycid = paycon.getClientid();
-			sellcid = paycon.getPoid();
+			buycid = paycon.getCid();
+			sellcid = paycon.getClientid();
 			
 		}
 		
 		if('S'== paycon.getSide()) {
 		// dealer sell
 		// publisher buy
-			sellcid = paycon.getClientid();
-			buycid = paycon.getPoid();
+			buycid = paycon.getClientid();
+			sellcid = paycon.getCid();
 		}
 		
 		if(('B'!= paycon.getSide())&&('S'!= paycon.getSide())) {
@@ -268,6 +274,8 @@ public class ApmService {
 				ans.setStatus(ComStatus.PayConfirmStatus.DB_ACC_MISS);
 				return ans;
 			}
+			// check if acc data corrupt
+			
 		}
 		catch(Exception e) {
 			ans.setStatus(ComStatus.PayConfirmStatus.DB_ACC_MISS);
@@ -300,7 +308,7 @@ public class ApmService {
 				
 		// how to deal with payconfirm				
 		
-		return ans;
+		return payconans;
 	} 
 	
 }
