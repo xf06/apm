@@ -12,6 +12,7 @@ public class CPaidAns {
 	private UUID requestid;
 	private int clientid;
 	private UUID oid;
+	private int cid;
 	private char side;
 	private UUID pnsoid;
 	private int pnsid;
@@ -59,6 +60,14 @@ public class CPaidAns {
 
 	public void setOid(UUID oid) {
 		this.oid = oid;
+	}
+	
+	public int getCid() {
+		return cid;
+	}
+
+	public void setCid(int cid) {
+		this.cid = cid;
 	}
 
 	public char getSide() {

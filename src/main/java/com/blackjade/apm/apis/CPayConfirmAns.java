@@ -15,7 +15,7 @@ public class CPayConfirmAns {
 	private int cid;
 	private char side;
 	private UUID pnsoid; // pns order id
-	//private int poid; // product owner id // clientid
+	private int poid; // product owner id 
 	private int pnsid;
 	private int pnsgid;
 	private long price;
@@ -61,6 +61,14 @@ public class CPayConfirmAns {
 		this.oid = oid;
 	}
 
+	public int getCid() {
+		return cid;
+	}
+
+	public void setCid(int cid) {
+		this.cid = cid;
+	}
+
 	public char getSide() {
 		return side;
 	}
@@ -77,12 +85,12 @@ public class CPayConfirmAns {
 		this.pnsoid = pnsoid;
 	}
 
-	public int getCid() {
-		return cid;
+	public int getPoid() {
+		return poid;
 	}
 
-	public void setCid(int cid) {
-		this.cid = cid;
+	public void setPoid(int poid) {
+		this.poid = poid;
 	}
 
 	public int getPnsid() {

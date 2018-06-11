@@ -14,7 +14,7 @@ public class CPayConfirm {
 	private int cid;
 	private char side;
 	private UUID pnsoid; // pns order id
-	//private int poid; // product owner id// this is same as clientid
+	private int poid; // product owner id
 	private int pnsid;
 	private int pnsgid;
 	private long price;
@@ -27,6 +27,19 @@ public class CPayConfirm {
 	public PayConfirmStatus reviewData() {
 		if(!this.messageid.equals("7007"))
 			return ComStatus.PayConfirmStatus.WRONG_MSGID;
+
+		// check logic 
+		if('B'==this.getSide()) {
+			if(this.getClientid()!=this.getPoid()) {
+				return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+			}				
+		}
+		
+		if('S'==this.getSide()) {
+			if(this.getClientid()!=this.getCid()) {
+				return ComStatus.PayConfirmStatus.IN_MSG_ERR;				
+			}	
+		}
 		
 		return ComStatus.PayConfirmStatus.SUCCESS;
 	}
@@ -62,7 +75,15 @@ public class CPayConfirm {
 	public void setOid(UUID oid) {
 		this.oid = oid;
 	}
+	
+	public int getCid() {
+		return cid;
+	}
 
+	public void setCid(int cid) {
+		this.cid = cid;
+	}
+	
 	public char getSide() {
 		return side;
 	}
@@ -79,12 +100,12 @@ public class CPayConfirm {
 		this.pnsoid = pnsoid;
 	}
 
-	public int getCid() {
-		return cid;
+	public int getPoid() {
+		return poid;
 	}
 
-	public void setCid(int cid) {
-		this.cid = cid;
+	public void setPoid(int poid) {
+		this.poid = poid;
 	}
 
 	public int getPnsid() {

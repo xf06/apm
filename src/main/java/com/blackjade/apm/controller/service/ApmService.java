@@ -236,27 +236,29 @@ public class ApmService {
 			throw new Exception(e.getMessage());//exception handling
 		}
 						
-		// settle two accounts
-		
+		// settle two accounts		
 		
 		int buycid = 0;
 		int sellcid = 0;
 		
-		long quant = paycon.getQuant();
+		long quant = paycon.getQuant();// quant must be exceed quant
 		
 		if('B'== paycon.getSide()){ //payconfirm is deal side
 		// dealer buy				
 		// publish sell
 			buycid = paycon.getCid();
-			sellcid = paycon.getClientid();
-			
+			//sellcid = paycon.getClientid();
+			sellcid = paycon.getPoid();
+		// check paycon.getClientid == paycon.getPoid()
 		}
 		
 		if('S'== paycon.getSide()) {
 		// dealer sell
 		// publisher buy
-			buycid = paycon.getClientid();
+			buycid = paycon.getPoid();
+			//sellcid = paycon.getClientid();
 			sellcid = paycon.getCid();
+		// check paycon.getClientid() == paycon.getCid()
 		}
 		
 		if(('B'!= paycon.getSide())&&('S'!= paycon.getSide())) {
@@ -292,7 +294,7 @@ public class ApmService {
 			}
 							
 			retcode = this.acc.updateSSAccRow(sellcid, paycon.getPnsgid(), paycon.getPnsid(), 
-					sellacc.getBalance()-quant, sellacc.getMargin()-quant, buyacc.getPnl()-quant);
+					sellacc.getBalance()-quant, sellacc.getMargin()-quant, sellacc.getPnl()-quant);
 			if(retcode == 0) {
 				throw new Exception(ComStatus.PayConfirmStatus.DB_ACC_MISS.toString());
 			}

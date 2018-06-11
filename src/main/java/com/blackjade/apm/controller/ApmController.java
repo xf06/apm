@@ -136,7 +136,11 @@ public class ApmController {
 		
 		ans.setClientid(cpaycon.getClientid());
 		ans.setOid(cpaycon.getOid());
+		ans.setCid(cpaycon.getCid());
 		ans.setSide(cpaycon.getSide());
+		ans.setPnsoid(cpaycon.getPnsoid());
+		ans.setPoid(cpaycon.getPoid());
+		
 		ans.setPnsgid(cpaycon.getPnsgid());
 		ans.setPnsid(cpaycon.getPnsid());
 		ans.setPrice(cpaycon.getPrice());
@@ -147,7 +151,7 @@ public class ApmController {
 			ans.setStatus(st);
 			return ans;
 		}
-		
+	
 		// send payconfirm to pub
 		try {
 			ans = this.apms.payconfirm(cpaycon, ans);
