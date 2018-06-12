@@ -25,20 +25,46 @@ public class CPayConfirm {
 	}
 
 	public PayConfirmStatus reviewData() {
+		
 		if(!this.messageid.equals("7007"))
 			return ComStatus.PayConfirmStatus.WRONG_MSGID;
 
+		if (this.requestid == null)
+			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+
+		if (this.clientid <= 0)
+			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+
+		if (this.oid == null)
+			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+
+		if (this.cid <= 0)
+			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+		
+		if (('S' != this.side) && ('B' != this.side))
+			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+
+		if (this.pnsoid == null)
+			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+
+		if (this.poid < 0)
+			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+		
+		//if ((this.pnsid <= 0)||(this.pnsgid <= 0))
+		//	return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+
+		if ((this.price <= 0)||(this.quant <= 0))
+			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+		
 		// check logic 
 		if('B'==this.getSide()) {
-			if(this.getClientid()!=this.getPoid()) {
+			if(this.getClientid()!=this.getPoid())
 				return ComStatus.PayConfirmStatus.IN_MSG_ERR;
-			}				
 		}
 		
 		if('S'==this.getSide()) {
-			if(this.getClientid()!=this.getCid()) {
-				return ComStatus.PayConfirmStatus.IN_MSG_ERR;				
-			}	
+			if(this.getClientid()!=this.getCid())
+				return ComStatus.PayConfirmStatus.IN_MSG_ERR;
 		}
 		
 		return ComStatus.PayConfirmStatus.SUCCESS;

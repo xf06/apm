@@ -19,28 +19,53 @@ public class CPaid {
 	private int pnsgid;
 	private long price;
 	private int quant;
-		
+
 	public CPaid() {
 		this.messageid = "7005";
 	}
-	
-	public PaidStatus reviewData(){
-		
-		if(!this.messageid.equals("7005"))
+
+	public PaidStatus reviewData() {
+
+		if (!this.messageid.equals("7005"))
 			return ComStatus.PaidStatus.WRONG_MSGID;
+
+		if (this.requestid == null)
+			return ComStatus.PaidStatus.IN_MSG_ERR;
+
+		if (this.clientid <= 0)
+			return ComStatus.PaidStatus.IN_MSG_ERR;
+
+		if (this.oid == null)
+			return ComStatus.PaidStatus.IN_MSG_ERR;
+
+		if (this.cid <= 0)
+			return ComStatus.PaidStatus.IN_MSG_ERR;
 		
-		if('B'==this.getSide()) {
-			if(this.getClientid()!=this.getCid()) {
+		if (('S' != this.side) && ('B' != this.side))
+			return ComStatus.PaidStatus.IN_MSG_ERR;
+
+		if ('B' == this.getSide()) {
+			if (this.getClientid() != this.getCid())
 				return ComStatus.PaidStatus.IN_MSG_ERR;
-			}				
 		}
-		
-		if('S'==this.getSide()) {
-			if(this.getClientid()!=this.getPoid()) {
-				return ComStatus.PaidStatus.IN_MSG_ERR;				
-			}	
+
+		if ('S' == this.getSide()) {
+			if (this.getClientid() != this.getPoid())
+				return ComStatus.PaidStatus.IN_MSG_ERR;
 		}
-		
+
+		if (this.pnsoid == null)
+			return ComStatus.PaidStatus.IN_MSG_ERR;
+
+		if (this.poid < 0)
+			return ComStatus.PaidStatus.IN_MSG_ERR;
+
+		if ((this.quant <= 0) || (this.price <= 0))
+			return ComStatus.PaidStatus.IN_MSG_ERR;
+
+		if ((this.pnsid <= 0) || (this.pnsgid <= 0))
+			return ComStatus.PaidStatus.IN_MSG_ERR;
+
 		return ComStatus.PaidStatus.SUCCESS;
 	}
 
@@ -90,8 +115,8 @@ public class CPaid {
 
 	public void setSide(char side) {
 		this.side = side;
-	}	
-	
+	}
+
 	public UUID getPnsoid() {
 		return pnsoid;
 	}
@@ -99,7 +124,7 @@ public class CPaid {
 	public void setPnsoid(UUID pnsoid) {
 		this.pnsoid = pnsoid;
 	}
-	
+
 	public int getPoid() {
 		return poid;
 	}
@@ -138,6 +163,6 @@ public class CPaid {
 
 	public void setQuant(int quant) {
 		this.quant = quant;
-	}	
-	
+	}
+
 }

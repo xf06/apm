@@ -13,8 +13,8 @@ public class CDeal {
 	private char side;
 	private UUID pnsoid; // pns order id
 	private int poid; // product owner id
-	private int pnsid;
-	private int pnsgid;
+	private int pnsid;	// remote config
+	private int pnsgid;	// remote config
 	private long price;
 	private int quant;
 
@@ -23,22 +23,31 @@ public class CDeal {
 	}
 
 	public DealStatus reviewData() {
-		
-		if(!this.messageid.equals("7003"))
+
+		if (!this.messageid.equals("7003"))
+			return ComStatus.DealStatus.IN_MSG_ERR;
+
+		if (this.requestid == null)
+			return ComStatus.DealStatus.IN_MSG_ERR;
+
+		if (this.clientid <= 0)
+			return ComStatus.DealStatus.IN_MSG_ERR;
+
+		if (('S' != this.side) && ('B' != this.side))
+			return ComStatus.DealStatus.IN_MSG_ERR;
+
+		if (this.pnsoid == null)
+			return ComStatus.DealStatus.IN_MSG_ERR;
+
+		if (this.poid <= 0)
 			return ComStatus.DealStatus.IN_MSG_ERR;
 		
-		if(('S'!=this.side)&&('B'!=this.side))
-			return ComStatus.DealStatus.IN_MSG_ERR;
-		
-		if(this.quant<=0)
+		if (this.quant <= 0)
 			return ComStatus.DealStatus.IN_QUANT_ERR;
-		
-		if(this.price<=0)
-			return ComStatus.DealStatus.IN_MSG_ERR;		
-				
-		if(this.pnsoid==null)
+
+		if (this.price <= 0)
 			return ComStatus.DealStatus.IN_MSG_ERR;
-	
+
 		return ComStatus.DealStatus.SUCCESS;
 	}
 
