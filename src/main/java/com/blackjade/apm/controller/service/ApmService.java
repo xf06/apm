@@ -1,7 +1,5 @@
 package com.blackjade.apm.controller.service;
 
-import java.util.UUID;
-
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +14,9 @@ import com.blackjade.apm.apis.CPayConfirmAns;
 import com.blackjade.apm.apis.CPublish;
 import com.blackjade.apm.apis.CPublishAns;
 import com.blackjade.apm.apis.ComStatus;
-import com.blackjade.apm.apis.ComStatus.PayConfirmStatus;
 import com.blackjade.apm.dao.AccDao;
 import com.blackjade.apm.domain.AccRow;
+import com.blackjade.apm.exception.CapiException;
 
 @Transactional
 @Component
@@ -91,7 +89,8 @@ public class ApmService {
 					return ans;
 				}
 			} catch (Exception e) {
-				throw new Exception(ComStatus.PublishStatus.ACC_DB_ERR.toString());
+				e.printStackTrace();				
+				throw new CapiException(ComStatus.PublishStatus.ACC_DB_ERR.toString());
 			}
 		}else {
 			if('B'!=pub.getSide()) 
@@ -107,16 +106,17 @@ public class ApmService {
 		try {
 			pubans = this.rest.postForObject(this.url+"/publish", pub, CPublishAns.class);
 			if (pubans == null) {
-				throw new Exception(ComStatus.PublishStatus.PUB_FAILED.toString());
+				throw new CapiException(ComStatus.PublishStatus.PUB_FAILED.toString());
 			}
 
 			// >> check return ans >>
 			if (pubans.getStatus() != ComStatus.PublishStatus.SUCCESS) {
-				throw new Exception(pubans.getStatus().toString());
+				throw new CapiException(pubans.getStatus().toString());
 			}
 
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			e.printStackTrace();
+			throw new CapiException(ComStatus.PublishStatus.PUB_FAILED.toString());
 		}
 
 		// success or errors will all be returned
@@ -201,13 +201,16 @@ public class ApmService {
 
 			// >> check return ans >>
 			if (ComStatus.DealStatus.SUCCESS!=dealans.getStatus()) {
-				throw new Exception(dealans.getStatus().toString());
+				throw new CapiException(dealans.getStatus().toString());
 			}
 			
 		}
+		catch(CapiException e) {
+			throw new CapiException(e.getMessage());
+		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new Exception(e.getMessage());//exception handling
+			throw new CapiException(ComStatus.DealStatus.PUB_FAILED.toString());//exception handling
 		}
 		
 		// now it is success
@@ -227,9 +230,12 @@ public class ApmService {
 
 			// >> check return ans >>
 			if (ComStatus.PayConfirmStatus.SUCCESS!=payconans.getStatus()) {
-				throw new Exception(payconans.getStatus().toString());
+				throw new CapiException(payconans.getStatus().toString());
 			}
 			
+		}
+		catch(CapiException e) {
+			throw new CapiException(e.getMessage());
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -296,8 +302,11 @@ public class ApmService {
 			retcode = this.acc.updateSSAccRow(sellcid, paycon.getPnsgid(), paycon.getPnsid(), 
 					sellacc.getBalance()-quant, sellacc.getMargin()-quant, sellacc.getPnl()-quant);
 			if(retcode == 0) {
-				throw new Exception(ComStatus.PayConfirmStatus.DB_ACC_MISS.toString());
+				throw new CapiException(ComStatus.PayConfirmStatus.DB_ACC_MISS.toString());
 			}
+		}
+		catch(CapiException e) {
+			throw new CapiException(e.getMessage());
 		}
 		catch(Exception e) {
 			e.printStackTrace();

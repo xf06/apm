@@ -1,7 +1,5 @@
 package com.blackjade.apm.controller;
 
-import java.util.UUID;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +19,7 @@ import com.blackjade.apm.apis.ComStatus.PayConfirmStatus;
 import com.blackjade.apm.apis.ComStatus.PublishStatus;
 import com.blackjade.apm.controller.service.ApmService;
 import com.blackjade.apm.dao.AccDao;
+import com.blackjade.apm.exception.CapiException;
 
 @RestController
 public class ApmController {
@@ -69,9 +68,11 @@ public class ApmController {
 				return ans;
 			}
 		}
+		catch(CapiException e) {
+			ans.setStatus(ComStatus.PublishStatus.valueOf(e.getMessage()));
+			return ans;
+		}
 		catch(Exception e) {
-			// this part should return the ans about a few things
-			// throw exception			
 			e.printStackTrace();
 			ans.setStatus(ComStatus.PublishStatus.DATABASE_ERR);
 			return ans;
@@ -115,6 +116,10 @@ public class ApmController {
 				return ans;
 			}
 		}
+		catch(CapiException e) {
+			ans.setStatus(ComStatus.DealStatus.valueOf(e.getMessage()));
+			return ans;
+		}		
 		catch(Exception e) {
 			e.printStackTrace();
 			ans.setStatus(ComStatus.DealStatus.DATABASE_ERR);
@@ -159,6 +164,10 @@ public class ApmController {
 				return ans;
 			}
 		}
+		catch(CapiException e) {
+			ans.setStatus(ComStatus.PayConfirmStatus.valueOf(e.getMessage()));
+			return ans;
+		}	
 		catch(Exception e) {
 			e.printStackTrace();
 			ans.setStatus(ComStatus.PayConfirmStatus.PC_DATABASE_ERR);
