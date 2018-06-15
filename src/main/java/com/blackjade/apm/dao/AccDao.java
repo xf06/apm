@@ -29,8 +29,15 @@ public interface AccDao {
 			@Param(value = "pnl") long pnl);
 	
 	
+	// update for cancel
+	// update sellside deal acc
+	public int updateSDCanAccRow(@Param(value = "cid") int cid, @Param(value = "pnsgid") int pnsgid,
+			@Param(value = "pnsid") int pnsid, @Param(value = "margin") long margin,
+			@Param(value = "freemargin") long freemargin);
 	
-	
-	
+	// update sellside pub acc
+	public int updateSPCanAccRow(@Param(value = "cid") int cid, @Param(value = "pnsgid") int pnsgid,
+			@Param(value = "pnsid") int pnsid, @Param(value = "margin") long margin,
+			@Param(value = "freemargin") long freemargin);
 	
 }

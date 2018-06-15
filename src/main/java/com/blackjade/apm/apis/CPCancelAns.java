@@ -11,8 +11,8 @@ public class CPCancelAns {
 	private String messageid;
 	private UUID requestid;
 	private int clientid;
-	private UUID oid;
-	private int cid;
+	//private UUID oid;
+	//private int cid;
 	private char side; // <B or S>
 	private UUID pnsoid;
 	private int poid; // product owner id
@@ -51,21 +51,21 @@ public class CPCancelAns {
 		this.clientid = clientid;
 	}
 
-	public UUID getOid() {
-		return oid;
-	}
-
-	public void setOid(UUID oid) {
-		this.oid = oid;
-	}
-
-	public int getCid() {
-		return cid;
-	}
-
-	public void setCid(int cid) {
-		this.cid = cid;
-	}
+//	public UUID getOid() {
+//		return oid;
+//	}
+//
+//	public void setOid(UUID oid) {
+//		this.oid = oid;
+//	}
+//
+//	public int getCid() {
+//		return cid;
+//	}
+//
+//	public void setCid(int cid) {
+//		this.cid = cid;
+//	}
 
 	public char getSide() {
 		return side;

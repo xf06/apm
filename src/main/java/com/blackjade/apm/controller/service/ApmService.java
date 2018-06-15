@@ -328,12 +328,200 @@ public class ApmService {
 
 	public CDCancelAns dcancel(CDCancel can, CDCancelAns ans) throws CapiException, Exception{
 		
+		// now set two accounts
+		int buycid = 0;
+		int sellcid = 0;
+		AccRow buyacc = null;
+		AccRow sellacc = null;
 		
+		// for buy-dealer no margin locking, for sell-publisher already done 
+		if('B'==can.getSide()) {
+			buycid = can.getCid();
+			sellcid = can.getPoid();	
+		}
+		
+		// for seller dealer lock is already done, for sell-publisher already done
+		// need to unlock dealer's margin
+		if('S'==can.getSide()) {
+			buycid = can.getPoid();
+			sellcid = can.getCid();			
+		}
+		
+		if(('B'!=can.getSide())&&('S'!=can.getSide())){
+			ans.setStatus(ComStatus.DCancelStatus.IN_MSG_ERR);
+			return ans;
+		}
+		
+		// get buyacc and sellacc
+		// select sellcid deal's acc
+	
+		try {
+			buyacc = this.acc.selectAccRow(buycid, can.getPnsgid(), can.getPnsid());
+			sellacc = this.acc.selectAccRow(sellcid, can.getPnsgid(), can.getPnsid());
+			if((buyacc==null)||(sellacc==null)){
+				ans.setStatus(ComStatus.DCancelStatus.DB_ACC_MISS);
+				return ans;
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			throw new CapiException(ComStatus.DCancelStatus.DB_ACC_MISS.toString());
+		}
+		
+		
+		// send things to pub dcancel
+		CDCancelAns dcanans = null;
+		try {
+			dcanans = this.rest.postForObject(this.url+"/dcancel",can, CDCancelAns.class);
+			if (dcanans == null) {
+				ans.setStatus(ComStatus.DCancelStatus.PUB_FAILED);
+				return ans;
+			}
+
+			// >> check return ans >>
+			if (ComStatus.DCancelStatus.SUCCESS!=dcanans.getStatus()) {
+				throw new CapiException(dcanans.getStatus().toString());
+			}
+			
+		}
+		catch(CapiException e) {
+			throw new CapiException(e.getMessage());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new CapiException(ComStatus.DCancelStatus.UNKNOWN.toString());//exception handling
+		}
+		
+		// everything success 
+		// update both accounts
+		if('B'==can.getSide()) {
+			ans.setStatus(dcanans.getStatus());
+			return ans;
+		}
+		
+		if('S'==can.getSide()) {
+			// update  seller-dealer locked margin
+			int retcode = 0;
+			long margin = sellacc.getMargin();
+			long freemargin = sellacc.getFreemargin();
+			long quant = can.getQuant();
+			// check margin
+			if(margin<quant) {
+				ans.setStatus(ComStatus.DCancelStatus.DB_ACC_ERR);
+				return ans;
+			}			
+			
+			try {
+				retcode = this.acc.updateSDCanAccRow(sellcid, can.getPnsgid(), can.getPnsid(), margin-quant, freemargin+quant);
+				if(retcode==0) {
+					ans.setStatus(ComStatus.DCancelStatus.DB_ACC_MISS);
+					return ans;
+				}
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				throw new CapiException(ComStatus.DCancelStatus.DB_ACC_ERR.toString());
+			}
+			
+			ans.setStatus(ComStatus.DCancelStatus.SUCCESS);
+			return ans;
+		}
+		
+		ans.setStatus(ComStatus.DCancelStatus.UNKNOWN);
 		return ans;
 	}
 	
 	public CPCancelAns pcancel(CPCancel can, CPCancelAns ans) throws CapiException, Exception{
 		
+		// input check //those already checked
+		if(can.getClientid()!=can.getPoid()) {
+			ans.setStatus(ComStatus.PCancelStatus.IN_MSG_ERR);
+			return ans;
+		}
+		
+		if(('B'!=can.getSide())&&('S'!=can.getSide())){
+			ans.setStatus(ComStatus.PCancelStatus.IN_MSG_ERR);
+			return ans;
+		}
+		
+		// now set two accounts
+		int pubcid = can.getPoid();
+		AccRow pubacc = null;
+		
+		pubacc = this.acc.selectAccRow(pubcid, can.getPnsgid(), can.getPnsid());
+		if(pubacc==null) {
+			ans.setStatus(ComStatus.PCancelStatus.DB_ACC_MISS);
+			return ans;
+		}
+		
+		// for buy-dealer no margin locking, for sell-publisher need to free locked margin 		
+		// for seller dealer lock is already done, for buy-publisher already done
+		// need to unlock dealer's margin
+		
+		CPCancelAns pcanans = null;
+		try {
+			pcanans = this.rest.postForObject(this.url+"/pcancel",can, CPCancelAns.class);
+			if (pcanans == null) {
+				ans.setStatus(ComStatus.PCancelStatus.PUB_FAILED);
+				return ans;
+			}
+
+			// >> check return ans >>
+			if (ComStatus.PCancelStatus.SUCCESS!=pcanans.getStatus()) {
+				throw new CapiException(pcanans.getStatus().toString());
+			}
+			
+		}
+		catch(CapiException e) {
+			throw new CapiException(e.getMessage());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			throw new CapiException(ComStatus.PCancelStatus.UNKNOWN.toString());//exception handling
+		}
+		
+		// for buy-publisher nothing need to be done, already done in pub 		
+		if('B'==can.getSide()) {
+			ans.setStatus(pcanans.getStatus());
+			ans.setAmount(pcanans.getAmount());
+			return ans;
+		}
+		
+		// for sell-publisher margin need to be freed from locking
+		if('S'!=can.getSide()) {
+			long margin = pubacc.getMargin();
+			long freemargin = pubacc.getFreemargin();
+			long amount = pcanans.getAmount(); // amount must be greate than 0
+			
+			// check margin
+			if(amount<0) {
+				ans.setStatus(ComStatus.PCancelStatus.UNKNOWN);
+				return ans;
+			}
+			
+			if(margin<amount) {
+				ans.setStatus(ComStatus.PCancelStatus.UNKNOWN);
+				return ans;
+			}
+			
+			int retcode = 0;
+			try {
+				retcode = this.acc.updateSPCanAccRow(pubcid, can.getPnsgid(), can.getPnsid(), margin-amount, freemargin+amount);
+				if(retcode == 0) {					
+					ans.setStatus(ComStatus.PCancelStatus.DB_ACC_ERR);
+					return ans;
+				}					
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				throw new CapiException(ComStatus.PCancelStatus.DB_ACC_ERR.toString());
+			}
+			
+			ans.setAmount(amount);
+			return ans;
+		}
+		
+		ans.setStatus(ComStatus.PCancelStatus.UNKNOWN);		
 		return ans;
 	}
 }

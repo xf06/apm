@@ -228,10 +228,38 @@ public class ApmController {
 		
 		// in msg check
 		PCancelStatus st = can.reviewData(); 
-				
-		
+	
+		// construct ans
 		CPCancelAns ans = new CPCancelAns(can.getRequestid()); 
+		ans.setClientid(can.getClientid());
+		//ans.setOid(can.getOid());
+		//ans.setCid(can.getCid());
+		ans.setSide(can.getSide());
+		ans.setPnsoid(can.getPnsoid());
+		ans.setPoid(can.getPoid());
+		ans.setPnsgid(can.getPnsgid());
+		ans.setPnsid(can.getPnsid());
+		ans.setAmount(can.getAmount());			
 		
+		if(ComStatus.PCancelStatus.SUCCESS!=st) {
+			ans.setStatus(st);
+			return ans;
+		}
+		
+		try {
+			ans = this.apms.pcancel(can, ans);
+			if(ComStatus.PCancelStatus.SUCCESS!=ans.getStatus())
+				return ans;
+		} 
+		catch(CapiException e) {
+			ans.setStatus(ComStatus.PCancelStatus.valueOf(e.getMessage()));
+			return ans;
+		}
+		catch(Exception e) {
+			ans.setStatus(ComStatus.PCancelStatus.UNKNOWN);
+			return ans;
+		}
+				
 		return ans;
 	} 
 	
