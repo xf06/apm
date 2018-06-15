@@ -183,7 +183,9 @@ public class ApmController {
 		// if everything ok return success
 		return ans;
 	} 
-		
+	
+	@RequestMapping(value = "/dcancel", method = RequestMethod.POST)
+	@ResponseBody
 	public CDCancelAns cDCancel(@RequestBody CDCancel can) {
 		
 		// in msg check
@@ -224,6 +226,8 @@ public class ApmController {
 		return ans;// return success here
 	}
 	
+	@RequestMapping(value = "/pcancel", method = RequestMethod.POST)
+	@ResponseBody
 	public CPCancelAns cPCancel(@RequestBody CPCancel can) {
 		
 		// in msg check
