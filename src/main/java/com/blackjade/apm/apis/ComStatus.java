@@ -112,4 +112,39 @@ public class ComStatus {
 		UNKNOWN
 	}
 	
+	public static enum DCancelStatus {
+		SUCCESS, 
+		WRONG_MSGID,
+		IN_MSG_ERR,
+		MSG_ERR,
+		TYPE_ERR,
+		DB_ORD_MISS,
+		DB_ORD_MESS,
+		ORD_STATUS_FINAL,
+		ORD_UPDATE_FAILED,
+		DB_PNS_MISS,
+		DB_PNS_MESS,
+		DB_PNS_STATUS,
+		PNS_UPDATE_FAILED,
+		PNS_STATUS_FINAL,
+		UNKNOWN
+	}
+	
+	public static enum PCancelStatus {
+		SUCCESS, 
+		WRONG_MSGID,
+		IN_MSG_ERR,
+		MSG_ERR,
+		TYPE_ERR,
+		DB_ORD_MISS,
+		DB_ORD_MESS,
+		ORD_STATUS_FINAL,
+		ORD_UPDATE_FAILED,
+		DB_PNS_MISS,
+		DB_PNS_MESS,
+		DB_PNS_STATUS,
+		PNS_UPDATE_FAILED,
+		PNS_STATUS_FINAL,
+		UNKNOWN
+	}
 }

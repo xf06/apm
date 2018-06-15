@@ -7,8 +7,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import com.blackjade.apm.apis.CDCancel;
+import com.blackjade.apm.apis.CDCancelAns;
 import com.blackjade.apm.apis.CDeal;
 import com.blackjade.apm.apis.CDealAns;
+import com.blackjade.apm.apis.CPCancel;
+import com.blackjade.apm.apis.CPCancelAns;
 import com.blackjade.apm.apis.CPayConfirm;
 import com.blackjade.apm.apis.CPayConfirmAns;
 import com.blackjade.apm.apis.CPublish;
@@ -321,5 +325,15 @@ public class ApmService {
 		
 		return payconans;
 	} 
+
+	public CDCancelAns dcancel(CDCancel can, CDCancelAns ans) throws CapiException, Exception{
+		
+		
+		return ans;
+	}
 	
+	public CPCancelAns pcancel(CPCancel can, CPCancelAns ans) throws CapiException, Exception{
+		
+		return ans;
+	}
 }

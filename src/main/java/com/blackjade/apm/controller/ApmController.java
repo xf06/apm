@@ -7,14 +7,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.blackjade.apm.apis.CDCancel;
+import com.blackjade.apm.apis.CDCancelAns;
 import com.blackjade.apm.apis.CDeal;
 import com.blackjade.apm.apis.CDealAns;
+import com.blackjade.apm.apis.CPCancel;
+import com.blackjade.apm.apis.CPCancelAns;
 import com.blackjade.apm.apis.CPayConfirm;
 import com.blackjade.apm.apis.CPayConfirmAns;
 import com.blackjade.apm.apis.CPublish;
 import com.blackjade.apm.apis.CPublishAns;
 import com.blackjade.apm.apis.ComStatus;
+import com.blackjade.apm.apis.ComStatus.DCancelStatus;
 import com.blackjade.apm.apis.ComStatus.DealStatus;
+import com.blackjade.apm.apis.ComStatus.PCancelStatus;
 import com.blackjade.apm.apis.ComStatus.PayConfirmStatus;
 import com.blackjade.apm.apis.ComStatus.PublishStatus;
 import com.blackjade.apm.controller.service.ApmService;
@@ -177,6 +183,60 @@ public class ApmController {
 		// if everything ok return success
 		return ans;
 	} 
+		
+	public CDCancelAns cDCancel(@RequestBody CDCancel can) {
+		
+		// in msg check
+		DCancelStatus st = can.reviewData();
+		CDCancelAns ans = new CDCancelAns(can.getRequestid());
+		
+		// construct ans
+		ans.setClientid(can.getClientid());
+		ans.setOid(can.getOid());
+		ans.setCid(can.getCid());
+		ans.setSide(can.getSide());
+		ans.setPnsoid(can.getPnsoid());
+		ans.setPoid(can.getPoid());
+		ans.setPnsgid(can.getPnsgid());
+		ans.setPnsid(can.getPnsid());
+		ans.setPrice(can.getPrice());
+		ans.setQuant(can.getQuant());
+		
+		if(ComStatus.DCancelStatus.SUCCESS!=st) {
+			ans.setStatus(st);
+			return ans;
+		}
+		
+		try {
+			ans = this.apms.dcancel(can, ans);
+			if(ComStatus.DCancelStatus.SUCCESS!=ans.getStatus())
+				return ans;
+		}
+		catch(CapiException e) {
+			ans.setStatus(ComStatus.DCancelStatus.valueOf(e.getMessage()));
+			return ans;
+		}
+		catch(Exception e) {
+			ans.setStatus(ComStatus.DCancelStatus.UNKNOWN);
+			return ans;
+		}		
+		
+		return ans;// return success here
+	}
+	
+	public CPCancelAns cPCancel(@RequestBody CPCancel can) {
+		
+		// in msg check
+		PCancelStatus st = can.reviewData(); 
+				
+		
+		CPCancelAns ans = new CPCancelAns(can.getRequestid()); 
+		
+		return ans;
+	} 
+	
+	
+	
 	
 //
 //	@RequestMapping(value = "/cancel", method = RequestMethod.POST)
