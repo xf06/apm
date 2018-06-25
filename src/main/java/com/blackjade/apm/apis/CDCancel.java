@@ -43,11 +43,11 @@ public class CDCancel {
 
 		if ((this.price <= 0) || (this.quant <= 0))
 			return ComStatus.DCancelStatus.IN_MSG_ERR;
-		
+
 		// logic check
-		if(this.clientid!=this.cid)
+		if (this.clientid != this.cid)
 			return ComStatus.DCancelStatus.IN_MSG_ERR;
-		
+
 		return ComStatus.DCancelStatus.SUCCESS;
 	}
 
@@ -119,40 +119,39 @@ public class CDCancel {
 		return pnsid;
 	}
 
-
 	public void setPnsid(int pnsid) {
 		this.pnsid = pnsid;
 	}
 
-	
 	public int getPnsgid() {
 		return pnsgid;
 	}
 
-	
 	public void setPnsgid(int pnsgid) {
 		this.pnsgid = pnsgid;
 	}
 
-	
 	public long getPrice() {
 		return price;
 	}
 
-	
 	public void setPrice(long price) {
 		this.price = price;
 	}
 
-	
 	public long getQuant() {
 		return quant;
 	}
 
-	
 	public void setQuant(long quant) {
 		this.quant = quant;
 	}
 
-}
+	@Override
+	public String toString() {
+		return "CDCancel [messageid=" + messageid + ", requestid=" + requestid + ", clientid=" + clientid + ", oid="
+				+ oid + ", cid=" + cid + ", side=" + side + ", pnsoid=" + pnsoid + ", poid=" + poid + ", pnsid=" + pnsid
+				+ ", pnsgid=" + pnsgid + ", price=" + price + ", quant=" + quant + "]";
+	}
 
+}

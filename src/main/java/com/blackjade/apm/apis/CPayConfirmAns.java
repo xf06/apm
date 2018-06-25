@@ -15,15 +15,16 @@ public class CPayConfirmAns {
 	private int cid;
 	private char side;
 	private UUID pnsoid; // pns order id
-	private int poid; // product owner id 
+	private int poid; // product owner id
 	private int pnsid;
 	private int pnsgid;
 	private long price;
 	private int quant;
 	private PayConfirmStatus status;
 
-	public CPayConfirmAns() {}
-	
+	public CPayConfirmAns() {
+	}
+
 	public CPayConfirmAns(UUID requestid) {
 		this.messageid = "7008";
 		this.requestid = requestid;
@@ -131,6 +132,14 @@ public class CPayConfirmAns {
 
 	public void setStatus(PayConfirmStatus status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "CPayConfirmAns [messageid=" + messageid + ", requestid=" + requestid + ", clientid=" + clientid
+				+ ", oid=" + oid + ", cid=" + cid + ", side=" + side + ", pnsoid=" + pnsoid + ", poid=" + poid
+				+ ", pnsid=" + pnsid + ", pnsgid=" + pnsgid + ", price=" + price + ", quant=" + quant + ", status="
+				+ status + "]";
 	}
 
 }

@@ -21,8 +21,9 @@ public class CDCancelAns {
 	private long quant;
 	private DCancelStatus status;
 
-	public CDCancelAns() {}
-	
+	public CDCancelAns() {
+	}
+
 	public CDCancelAns(UUID requestid) {
 		this.messageid = "7010";
 		this.requestid = requestid;
@@ -130,6 +131,13 @@ public class CDCancelAns {
 
 	public void setStatus(DCancelStatus status) {
 		this.status = status;
+	}
+
+	@Override
+	public String toString() {
+		return "CDCancelAns [messageid=" + messageid + ", requestid=" + requestid + ", clientid=" + clientid + ", oid="
+				+ oid + ", cid=" + cid + ", side=" + side + ", pnsoid=" + pnsoid + ", poid=" + poid + ", pnsid=" + pnsid
+				+ ", pnsgid=" + pnsgid + ", price=" + price + ", quant=" + quant + ", status=" + status + "]";
 	}
 
 }

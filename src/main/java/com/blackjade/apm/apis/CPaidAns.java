@@ -20,14 +20,14 @@ public class CPaidAns {
 	private long price;
 	private int quant;
 	private PaidStatus status;
-	
+
 	public CPaidAns() {
-		this.messageid ="7006";
+		this.messageid = "7006";
 	}
-	
+
 	public CPaidAns(UUID requestid) {
 		this.requestid = requestid;
-		this.messageid ="7006";
+		this.messageid = "7006";
 	}
 
 	public String getMessageid() {
@@ -61,7 +61,7 @@ public class CPaidAns {
 	public void setOid(UUID oid) {
 		this.oid = oid;
 	}
-	
+
 	public int getCid() {
 		return cid;
 	}
@@ -77,7 +77,7 @@ public class CPaidAns {
 	public void setSide(char side) {
 		this.side = side;
 	}
-	
+
 	public UUID getPnsoid() {
 		return pnsoid;
 	}
@@ -126,5 +126,11 @@ public class CPaidAns {
 		this.status = status;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "CPaidAns [messageid=" + messageid + ", requestid=" + requestid + ", clientid=" + clientid + ", oid="
+				+ oid + ", cid=" + cid + ", side=" + side + ", pnsoid=" + pnsoid + ", pnsid=" + pnsid + ", pnsgid="
+				+ pnsgid + ", price=" + price + ", quant=" + quant + ", status=" + status + "]";
+	}
+
 }

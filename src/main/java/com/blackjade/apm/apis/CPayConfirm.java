@@ -25,8 +25,8 @@ public class CPayConfirm {
 	}
 
 	public PayConfirmStatus reviewData() {
-		
-		if(!this.messageid.equals("7007"))
+
+		if (!this.messageid.equals("7007"))
 			return ComStatus.PayConfirmStatus.WRONG_MSGID;
 
 		if (this.requestid == null)
@@ -40,7 +40,7 @@ public class CPayConfirm {
 
 		if (this.cid <= 0)
 			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
-		
+
 		if (('S' != this.side) && ('B' != this.side))
 			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
 
@@ -49,24 +49,24 @@ public class CPayConfirm {
 
 		if (this.poid < 0)
 			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
-		
-		//if ((this.pnsid <= 0)||(this.pnsgid <= 0))
-		//	return ComStatus.PayConfirmStatus.IN_MSG_ERR;
 
-		if ((this.price <= 0)||(this.quant <= 0))
+		// if ((this.pnsid <= 0)||(this.pnsgid <= 0))
+		// return ComStatus.PayConfirmStatus.IN_MSG_ERR;
+
+		if ((this.price <= 0) || (this.quant <= 0))
 			return ComStatus.PayConfirmStatus.IN_MSG_ERR;
-		
-		// check logic 
-		if('B'==this.getSide()) {
-			if(this.getClientid()!=this.getPoid())
+
+		// check logic
+		if ('B' == this.getSide()) {
+			if (this.getClientid() != this.getPoid())
 				return ComStatus.PayConfirmStatus.IN_MSG_ERR;
 		}
-		
-		if('S'==this.getSide()) {
-			if(this.getClientid()!=this.getCid())
+
+		if ('S' == this.getSide()) {
+			if (this.getClientid() != this.getCid())
 				return ComStatus.PayConfirmStatus.IN_MSG_ERR;
 		}
-		
+
 		return ComStatus.PayConfirmStatus.SUCCESS;
 	}
 
@@ -101,7 +101,7 @@ public class CPayConfirm {
 	public void setOid(UUID oid) {
 		this.oid = oid;
 	}
-	
+
 	public int getCid() {
 		return cid;
 	}
@@ -109,7 +109,7 @@ public class CPayConfirm {
 	public void setCid(int cid) {
 		this.cid = cid;
 	}
-	
+
 	public char getSide() {
 		return side;
 	}
@@ -117,7 +117,7 @@ public class CPayConfirm {
 	public void setSide(char side) {
 		this.side = side;
 	}
-		
+
 	public UUID getPnsoid() {
 		return pnsoid;
 	}
@@ -164,6 +164,13 @@ public class CPayConfirm {
 
 	public void setQuant(int quant) {
 		this.quant = quant;
+	}
+
+	@Override
+	public String toString() {
+		return "CPayConfirm [messageid=" + messageid + ", requestid=" + requestid + ", clientid=" + clientid + ", oid="
+				+ oid + ", cid=" + cid + ", side=" + side + ", pnsoid=" + pnsoid + ", poid=" + poid + ", pnsid=" + pnsid
+				+ ", pnsgid=" + pnsgid + ", price=" + price + ", quant=" + quant + "]";
 	}
 
 }

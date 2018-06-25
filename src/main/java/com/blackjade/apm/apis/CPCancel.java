@@ -11,8 +11,8 @@ public class CPCancel {
 	private String messageid;
 	private UUID requestid;
 	private int clientid;
-	//private UUID oid; // no need 
-	//private int cid;  // no need
+	// private UUID oid; // no need
+	// private int cid; // no need
 	private char side; // <B or S>
 	private UUID pnsoid;
 	private int poid; // product owner id
@@ -21,7 +21,7 @@ public class CPCancel {
 	private long amount;
 
 	public PCancelStatus reviewData() {
-		
+
 		if (!this.messageid.equals("701D"))
 			return ComStatus.PCancelStatus.WRONG_MSGID;
 
@@ -40,17 +40,16 @@ public class CPCancel {
 		if (this.poid <= 0)
 			return ComStatus.PCancelStatus.IN_MSG_ERR;
 
-		if (this.amount<= 0)
+		if (this.amount <= 0)
 			return ComStatus.PCancelStatus.IN_MSG_ERR;
-			
+
 		// logic check
-		if(this.clientid!=this.poid)
+		if (this.clientid != this.poid)
 			return ComStatus.PCancelStatus.IN_MSG_ERR;
-				
-		
+
 		return ComStatus.PCancelStatus.SUCCESS;
 	}
-	
+
 	public String getMessageid() {
 		return messageid;
 	}
@@ -75,21 +74,21 @@ public class CPCancel {
 		this.clientid = clientid;
 	}
 
-//	public UUID getOid() {
-//		return oid;
-//	}
-//
-//	public void setOid(UUID oid) {
-//		this.oid = oid;
-//	}
-//
-//	public int getCid() {
-//		return cid;
-//	}
-//
-//	public void setCid(int cid) {
-//		this.cid = cid;
-//	}
+	// public UUID getOid() {
+	// return oid;
+	// }
+	//
+	// public void setOid(UUID oid) {
+	// this.oid = oid;
+	// }
+	//
+	// public int getCid() {
+	// return cid;
+	// }
+	//
+	// public void setCid(int cid) {
+	// this.cid = cid;
+	// }
 
 	public char getSide() {
 		return side;
@@ -137,6 +136,13 @@ public class CPCancel {
 
 	public void setAmount(long amount) {
 		this.amount = amount;
+	}
+
+	@Override
+	public String toString() {
+		return "CPCancel [messageid=" + messageid + ", requestid=" + requestid + ", clientid=" + clientid + ", side="
+				+ side + ", pnsoid=" + pnsoid + ", poid=" + poid + ", pnsid=" + pnsid + ", pnsgid=" + pnsgid
+				+ ", amount=" + amount + "]";
 	}
 
 }

@@ -18,9 +18,10 @@ public class CPublishAns {
 	private long min;
 	private long max;
 	private PublishStatus status;
-	
-	public CPublishAns() {}
-	
+
+	public CPublishAns() {
+	}
+
 	public CPublishAns(UUID requestid) {
 		this.messageid = "7002";
 		this.requestid = requestid;
@@ -114,7 +115,6 @@ public class CPublishAns {
 		this.max = max;
 	}
 
-
 	public PublishStatus getStatus() {
 		return status;
 	}
@@ -122,5 +122,12 @@ public class CPublishAns {
 	public void setStatus(PublishStatus status) {
 		this.status = status;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "CPublishAns [messageid=" + messageid + ", requestid=" + requestid + ", clientid=" + clientid + ", oid="
+				+ oid + ", side=" + side + ", pnsid=" + pnsid + ", pnsgid=" + pnsgid + ", price=" + price + ", quant="
+				+ quant + ", min=" + min + ", max=" + max + ", status=" + status + "]";
+	}
+
 }

@@ -20,8 +20,9 @@ public class CDealAns {
 	private int quant;
 	private DealStatus status;
 
-	public CDealAns() {}
-	
+	public CDealAns() {
+	}
+
 	public CDealAns(UUID requestid) {
 		this.messageid = "7004";
 		this.requestid = requestid;
@@ -50,7 +51,7 @@ public class CDealAns {
 	public void setClientid(int clientid) {
 		this.clientid = clientid;
 	}
-	
+
 	public UUID getOid() {
 		return oid;
 	}
@@ -66,7 +67,7 @@ public class CDealAns {
 	public void setSide(char side) {
 		this.side = side;
 	}
-		
+
 	public UUID getPnsoid() {
 		return pnsoid;
 	}
@@ -123,7 +124,11 @@ public class CDealAns {
 		this.status = status;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "CDealAns [messageid=" + messageid + ", requestid=" + requestid + ", clientid=" + clientid + ", oid="
+				+ oid + ", side=" + side + ", pnsoid=" + pnsoid + ", poid=" + poid + ", pnsid=" + pnsid + ", pnsgid="
+				+ pnsgid + ", price=" + price + ", quant=" + quant + ", status=" + status + "]";
+	}
+
 }
-
-
