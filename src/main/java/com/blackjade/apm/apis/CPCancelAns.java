@@ -21,7 +21,8 @@ public class CPCancelAns {
 	private long amount;
 	private PCancelStatus status;
 
-
+	public CPCancelAns() {}
+	
 	public CPCancelAns(UUID requestid) {
 		this.messageid = "701E";
 		this.requestid = requestid;

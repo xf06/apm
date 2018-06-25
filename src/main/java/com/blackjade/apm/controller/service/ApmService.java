@@ -488,7 +488,7 @@ public class ApmService {
 		}
 		
 		// for sell-publisher margin need to be freed from locking
-		if('S'!=can.getSide()) {
+		if('S'==can.getSide()) {
 			long margin = pubacc.getMargin();
 			long freemargin = pubacc.getFreemargin();
 			long amount = pcanans.getAmount(); // amount must be greate than 0
@@ -518,6 +518,7 @@ public class ApmService {
 			}
 			
 			ans.setAmount(amount);
+			ans.setStatus(pcanans.getStatus());  
 			return ans;
 		}
 		

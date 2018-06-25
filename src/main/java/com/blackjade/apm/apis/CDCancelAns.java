@@ -21,6 +21,8 @@ public class CDCancelAns {
 	private long quant;
 	private DCancelStatus status;
 
+	public CDCancelAns() {}
+	
 	public CDCancelAns(UUID requestid) {
 		this.messageid = "7010";
 		this.requestid = requestid;
