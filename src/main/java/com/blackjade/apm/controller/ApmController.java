@@ -1,5 +1,7 @@
 package com.blackjade.apm.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,9 +38,14 @@ public class ApmController {
 	@Autowired 
 	private ApmService apms;
 	
+	private static final Logger apmlog = LogManager.getLogger(ApmController.class.getName()); 
+	
+	
 	@RequestMapping(value = "/publish", method = RequestMethod.POST)
 	@ResponseBody
 	public CPublishAns cQueryPublish(@RequestBody CPublish pub) {
+		
+		apmlog.info(pub.toString());
 		
 		// check input data
 		PublishStatus st = pub.reviewData();
@@ -63,6 +70,7 @@ public class ApmController {
 		// check review data
 		if(st!=ComStatus.PublishStatus.SUCCESS) {
 			ans.setStatus(st);
+			apmlog.warn(ans.toString());
 			return ans;
 		}
 
@@ -71,20 +79,24 @@ public class ApmController {
 			
 			ans = this.apms.publishApm(pub, ans); // if not ok just throw 			
 			if(ComStatus.PublishStatus.SUCCESS!=ans.getStatus()) {
+				apmlog.warn(ans.toString());
 				return ans;
 			}
 		}
 		catch(CapiException e) {
 			ans.setStatus(ComStatus.PublishStatus.valueOf(e.getMessage()));
+			apmlog.warn(ans.toString());
 			return ans;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			ans.setStatus(ComStatus.PublishStatus.DATABASE_ERR);
+			apmlog.warn(ans.toString());
 			return ans;
 		}
 				
 		// return success
+		apmlog.info(ans.toString());
 		return ans;
 	}	
 
@@ -92,6 +104,8 @@ public class ApmController {
 	@ResponseBody
 	public CDealAns cQueryDeal(@RequestBody CDeal deal){
 		
+		apmlog.info(deal.toString());
+
 		// check input 
 		DealStatus st = deal.reviewData(); 
 			
@@ -112,6 +126,7 @@ public class ApmController {
 		
 		if(ComStatus.DealStatus.SUCCESS!=st) {
 			ans.setStatus(st);
+			apmlog.warn(ans.toString());
 			return ans;
 		}
 		
@@ -119,20 +134,24 @@ public class ApmController {
 		try {
 			ans = this.apms.dealApm(deal, ans);
 			if(ComStatus.DealStatus.SUCCESS!=ans.getStatus()) {
+				apmlog.warn(ans.toString());
 				return ans;
 			}
 		}
 		catch(CapiException e) {
 			ans.setStatus(ComStatus.DealStatus.valueOf(e.getMessage()));
+			apmlog.warn(ans.toString());
 			return ans;
 		}		
 		catch(Exception e) {
 			e.printStackTrace();
 			ans.setStatus(ComStatus.DealStatus.DATABASE_ERR);
+			apmlog.warn(ans.toString());
 			return ans;			
 		}
 		
 		// if everything ok return success
+		apmlog.info(ans.toString());
 		return ans;
 	}
 		
@@ -140,6 +159,7 @@ public class ApmController {
 	@ResponseBody
 	public CPayConfirmAns cQueryPayConfirm(@RequestBody CPayConfirm cpaycon){
 		
+		apmlog.info(cpaycon.toString());
 		// check status
 		PayConfirmStatus st = cpaycon.reviewData();
 		
@@ -160,6 +180,7 @@ public class ApmController {
 		// check status
 		if(ComStatus.PayConfirmStatus.SUCCESS!=st) {
 			ans.setStatus(st);
+			apmlog.warn(ans.toString());
 			return ans;
 		}
 	
@@ -167,20 +188,24 @@ public class ApmController {
 		try {
 			ans = this.apms.payconfirm(cpaycon, ans);
 			if(ComStatus.PayConfirmStatus.SUCCESS!=ans.getStatus()) {
+				apmlog.warn(ans.toString());
 				return ans;
 			}
 		}
 		catch(CapiException e) {
 			ans.setStatus(ComStatus.PayConfirmStatus.valueOf(e.getMessage()));
+			apmlog.warn(ans.toString());
 			return ans;
 		}	
 		catch(Exception e) {
 			e.printStackTrace();
 			ans.setStatus(ComStatus.PayConfirmStatus.PC_DATABASE_ERR);
+			apmlog.warn(ans.toString());
 			return ans;
 		}		
 		
 		// if everything ok return success
+		apmlog.info(ans.toString());
 		return ans;
 	} 
 	
@@ -188,6 +213,7 @@ public class ApmController {
 	@ResponseBody
 	public CDCancelAns cDCancel(@RequestBody CDCancel can) {
 		
+		apmlog.info(can.toString());
 		// in msg check
 		DCancelStatus st = can.reviewData();
 		CDCancelAns ans = new CDCancelAns(can.getRequestid());
@@ -206,23 +232,29 @@ public class ApmController {
 		
 		if(ComStatus.DCancelStatus.SUCCESS!=st) {
 			ans.setStatus(st);
+			apmlog.warn(ans.toString());
 			return ans;
 		}
 		
 		try {
 			ans = this.apms.dcancel(can, ans);
-			if(ComStatus.DCancelStatus.SUCCESS!=ans.getStatus())
+			if(ComStatus.DCancelStatus.SUCCESS!=ans.getStatus()) {
+				apmlog.warn(ans.toString());
 				return ans;
+			}
 		}
 		catch(CapiException e) {
 			ans.setStatus(ComStatus.DCancelStatus.valueOf(e.getMessage()));
+			apmlog.warn(ans.toString());
 			return ans;
 		}
 		catch(Exception e) {
 			ans.setStatus(ComStatus.DCancelStatus.UNKNOWN);
+			apmlog.warn(ans.toString());
 			return ans;
 		}		
 		
+		apmlog.info(ans.toString());
 		return ans;// return success here
 	}
 	
@@ -230,6 +262,8 @@ public class ApmController {
 	@ResponseBody
 	public CPCancelAns cPCancel(@RequestBody CPCancel can) {
 		
+		apmlog.info(can.toString());
+
 		// in msg check
 		PCancelStatus st = can.reviewData(); 
 	
@@ -247,40 +281,30 @@ public class ApmController {
 		
 		if(ComStatus.PCancelStatus.SUCCESS!=st) {
 			ans.setStatus(st);
+			apmlog.warn(ans.toString());
 			return ans;
 		}
 		
 		try {
 			ans = this.apms.pcancel(can, ans);
-			if(ComStatus.PCancelStatus.SUCCESS!=ans.getStatus())
+			if(ComStatus.PCancelStatus.SUCCESS!=ans.getStatus()) {
+				apmlog.warn(ans.toString());
 				return ans;
+			}
 		} 
 		catch(CapiException e) {
 			ans.setStatus(ComStatus.PCancelStatus.valueOf(e.getMessage()));
+			apmlog.warn(ans.toString());
 			return ans;
 		}
 		catch(Exception e) {
 			ans.setStatus(ComStatus.PCancelStatus.UNKNOWN);
+			apmlog.warn(ans.toString());
 			return ans;
 		}
 				
+		apmlog.info(ans.toString());
 		return ans;
 	} 
 	
-	
-	
-	
-//
-//	@RequestMapping(value = "/cancel", method = RequestMethod.POST)
-//	@ResponseBody
-//	public cQueryPublish(){
-//		return ans;
-//	}
-//
-//	@RequestMapping(value = "/payconfirm", method = RequestMethod.POST)
-//	@ResponseBody
-//	public cQueryPublish(){
-//		return ans;
-//	}
-
 }
