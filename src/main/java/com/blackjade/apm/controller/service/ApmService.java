@@ -28,7 +28,8 @@ public class ApmService {
 
 	@Autowired
 	private AccDao acc;
-
+	
+	@Autowired
 	private RestTemplate rest;
 
 	private String url;
@@ -38,8 +39,9 @@ public class ApmService {
 	@PostConstruct
 	public void apmInit() throws Exception {
 		this.port = "8112";
-		this.url = "http://localhost:" + port;
-		this.rest = new RestTemplate();
+		//this.url = "http://localhost:" + port;
+		this.url = "http://otc-pub/";
+		//this.rest = new RestTemplate();
 	}
 
 	public CPublishAns publishApm(CPublish pub, CPublishAns ans) throws Exception {
