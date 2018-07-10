@@ -15,7 +15,7 @@ public class CPublish {
 	private int pnsid;
 	private int pnsgid;
 	private long price;
-	private int quant;
+	private long quant;
 	private long min;
 	private long max;
 
@@ -105,11 +105,11 @@ public class CPublish {
 		this.price = price;
 	}
 
-	public int getQuant() {
+	public long getQuant() {
 		return quant;
 	}
 
-	public void setQuant(int quant) {
+	public void setQuant(long quant) {
 		this.quant = quant;
 	}
 

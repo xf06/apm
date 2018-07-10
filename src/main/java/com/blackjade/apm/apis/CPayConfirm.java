@@ -18,7 +18,7 @@ public class CPayConfirm {
 	private int pnsid;
 	private int pnsgid;
 	private long price;
-	private int quant;
+	private long quant;
 
 	public CPayConfirm() {
 		this.messageid = "7007";
@@ -158,11 +158,11 @@ public class CPayConfirm {
 		this.price = price;
 	}
 
-	public int getQuant() {
+	public long getQuant() {
 		return quant;
 	}
 
-	public void setQuant(int quant) {
+	public void setQuant(long quant) {
 		this.quant = quant;
 	}
 

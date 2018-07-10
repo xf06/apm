@@ -16,7 +16,7 @@ public class CDeal {
 	private int pnsid; // remote config
 	private int pnsgid; // remote config
 	private long price;
-	private int quant;
+	private long quant;
 
 	public CDeal() {
 		this.messageid = "7003";
@@ -123,11 +123,11 @@ public class CDeal {
 		this.price = price;
 	}
 
-	public int getQuant() {
+	public long getQuant() {
 		return quant;
 	}
 
-	public void setQuant(int quant) {
+	public void setQuant(long quant) {
 		this.quant = quant;
 	}
 

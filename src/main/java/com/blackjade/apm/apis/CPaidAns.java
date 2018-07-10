@@ -18,7 +18,7 @@ public class CPaidAns {
 	private int pnsid;
 	private int pnsgid;
 	private long price;
-	private int quant;
+	private long quant;
 	private PaidStatus status;
 
 	public CPaidAns() {
@@ -110,11 +110,11 @@ public class CPaidAns {
 		this.price = price;
 	}
 
-	public int getQuant() {
+	public long getQuant() {
 		return quant;
 	}
 
-	public void setQuant(int quant) {
+	public void setQuant(long quant) {
 		this.quant = quant;
 	}
 

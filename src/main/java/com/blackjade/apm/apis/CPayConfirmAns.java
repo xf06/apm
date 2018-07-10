@@ -19,7 +19,7 @@ public class CPayConfirmAns {
 	private int pnsid;
 	private int pnsgid;
 	private long price;
-	private int quant;
+	private long quant;
 	private PayConfirmStatus status;
 
 	public CPayConfirmAns() {
@@ -118,11 +118,11 @@ public class CPayConfirmAns {
 		this.price = price;
 	}
 
-	public int getQuant() {
+	public long getQuant() {
 		return quant;
 	}
 
-	public void setQuant(int quant) {
+	public void setQuant(long quant) {
 		this.quant = quant;
 	}
 
