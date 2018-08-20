@@ -3,6 +3,7 @@ package com.blackjade.apm.apis;
 import java.util.UUID;
 
 import com.blackjade.apm.apis.ComStatus.DepositAccStatus;
+import com.blackjade.apm.apis.ComStatus.DepositOrdStatus;
 
 //cDepositAcc	0x7103	{requestid, clientid, pnsid, pnsgid}	HTTP
 
@@ -16,8 +17,8 @@ public class CDepositAcc {
 	private int pnsgid;
 	private long quant;
 	private String tranid;
-	private String confidence;
-	
+	private DepositOrdStatus conlvl;
+
 	public DepositAccStatus reviewData() {
 
 		if (!this.messageid.equals("7105"))
@@ -97,6 +98,21 @@ public class CDepositAcc {
 
 	public void setTranid(String tranid) {
 		this.tranid = tranid;
+	}
+
+	public DepositOrdStatus getConlvl() {
+		return conlvl;
+	}
+
+	public void setConlvl(DepositOrdStatus conlvl) {
+		this.conlvl = conlvl;
+	}
+
+	@Override
+	public String toString() {
+		return "CDepositAcc [messageid=" + messageid + ", requestid=" + requestid + ", clientid=" + clientid + ", oid="
+				+ oid + ", pnsid=" + pnsid + ", pnsgid=" + pnsgid + ", quant=" + quant + ", tranid=" + tranid
+				+ ", conlvl=" + conlvl + "]";
 	}
 
 }

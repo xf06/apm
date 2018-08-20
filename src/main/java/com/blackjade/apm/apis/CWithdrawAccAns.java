@@ -3,6 +3,7 @@ package com.blackjade.apm.apis;
 import java.util.UUID;
 
 import com.blackjade.apm.apis.ComStatus.WithdrawAccStatus;
+import com.blackjade.apm.apis.ComStatus.WithdrawOrdStatus;
 
 //  cWithdrawAccAns	0x7106	{requestid, clientid, oid, pnsid, pnsgid, status}	HTTP
 
@@ -16,7 +17,8 @@ public class CWithdrawAccAns {
 	private int pnsgid;
 	private long quant;
 	private WithdrawAccStatus status;
-
+	private WithdrawOrdStatus conlvl;
+	
 	public CWithdrawAccAns() {		
 	}
 
@@ -87,6 +89,14 @@ public class CWithdrawAccAns {
 
 	public void setStatus(WithdrawAccStatus status) {
 		this.status = status;
+	}
+	
+	public WithdrawOrdStatus getConlvl() {
+		return conlvl;
+	}
+
+	public void setConlvl(WithdrawOrdStatus conlvl) {
+		this.conlvl = conlvl;
 	}
 
 	@Override

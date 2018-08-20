@@ -3,6 +3,7 @@ package com.blackjade.apm.apis;
 import java.util.UUID;
 
 import com.blackjade.apm.apis.ComStatus.WithdrawAccStatus;
+import com.blackjade.apm.apis.ComStatus.WithdrawOrdStatus;
 
 //cWithdrawAcc	0x7105	{requestid, clientid, pnsid, pnsgid}	HTTP
 
@@ -16,6 +17,7 @@ public class CWithdrawAcc {
 	private int pnsgid;
 	private long quant;
 	private String tranid;
+	private WithdrawOrdStatus conlvl;
 
 	public WithdrawAccStatus reviewData() {
 
@@ -89,7 +91,6 @@ public class CWithdrawAcc {
 	public void setQuant(long quant) {
 		this.quant = quant;
 	}
-
 	
 	public String getTranid() {
 		return tranid;
@@ -97,6 +98,14 @@ public class CWithdrawAcc {
 
 	public void setTranid(String tranid) {
 		this.tranid = tranid;
+	}
+	
+	public WithdrawOrdStatus getConlvl() {
+		return conlvl;
+	}
+
+	public void setConlvl(WithdrawOrdStatus conlvl) {
+		this.conlvl = conlvl;
 	}
 
 	@Override

@@ -158,20 +158,24 @@ public class ComStatus {
 		SUCCESS,
 		WRONG_MSGID,
 		IN_MSG_ERR,
+		MISS_ACC_DB,
+		MISS_ACC_DB_EX,
 		UNKNOWN
-	}
-	
-	public static enum WithdrawOrdStatus{
-		PROCEEDING,
-		SUCCESS,
-		FAILED
 	}
 	
 	public static enum DepositAccStatus{
 		SUCCESS,
 		WRONG_MSGID,
 		IN_MSG_ERR,
+		MISS_ACC_DB,
+		MISS_ACC_DB_EX,
 		UNKNOWN
+	}
+		
+	public static enum WithdrawOrdStatus{
+		PROCEEDING,
+		SUCCESS,
+		FAILED
 	}
 	
 	public static enum DepositOrdStatus{

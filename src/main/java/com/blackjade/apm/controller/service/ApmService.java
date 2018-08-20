@@ -535,20 +535,37 @@ public class ApmService {
 	// deposit and withdraw
 	public CDepositAccAns depositAcc(CDepositAcc dp ,CDepositAccAns ans) throws CapiException, Exception{
 
+		// first check inout order status
+		
+		
+		
+		if(ComStatus.DepositOrdStatus.PROCEEDING!=dp.getConlvl()) {
+			
+			
+		}
+		else 
+		{
+			
+			
+		}
+		
+			
 		AccRow accrow = null;
 		// lock APM
 		try {
 			accrow = this.acc.selectAccRow(dp.getClientid(), dp.getPnsgid(), dp.getPnsid());
 			if (accrow == null) {
-				ans.setStatus(ComStatus.PublishStatus.ACC_DB_EMPTY);
+				ans.setStatus(ComStatus.DepositAccStatus.MISS_ACC_DB);
 				return ans;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			ans.setStatus(ComStatus.PublishStatus.ACC_DB_MISS);
+			ans.setStatus(ComStatus.DepositAccStatus.MISS_ACC_DB_EX);
 			return ans;
 		}
 		
+		
+		long margin = 
 		
 		
 		return ans;
