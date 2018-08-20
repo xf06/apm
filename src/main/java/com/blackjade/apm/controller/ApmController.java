@@ -13,15 +13,20 @@ import com.blackjade.apm.apis.CDCancel;
 import com.blackjade.apm.apis.CDCancelAns;
 import com.blackjade.apm.apis.CDeal;
 import com.blackjade.apm.apis.CDealAns;
+import com.blackjade.apm.apis.CDepositAcc;
+import com.blackjade.apm.apis.CDepositAccAns;
 import com.blackjade.apm.apis.CPCancel;
 import com.blackjade.apm.apis.CPCancelAns;
 import com.blackjade.apm.apis.CPayConfirm;
 import com.blackjade.apm.apis.CPayConfirmAns;
 import com.blackjade.apm.apis.CPublish;
 import com.blackjade.apm.apis.CPublishAns;
+import com.blackjade.apm.apis.CWithdrawAcc;
+import com.blackjade.apm.apis.CWithdrawAccAns;
 import com.blackjade.apm.apis.ComStatus;
 import com.blackjade.apm.apis.ComStatus.DCancelStatus;
 import com.blackjade.apm.apis.ComStatus.DealStatus;
+import com.blackjade.apm.apis.ComStatus.DepositAccStatus;
 import com.blackjade.apm.apis.ComStatus.PCancelStatus;
 import com.blackjade.apm.apis.ComStatus.PayConfirmStatus;
 import com.blackjade.apm.apis.ComStatus.PublishStatus;
@@ -307,4 +312,50 @@ public class ApmController {
 		return ans;
 	} 
 	
+	@RequestMapping(value = "/deposit", method = RequestMethod.POST)
+	@ResponseBody
+	public CDepositAccAns cDepositAcc(@RequestBody CDepositAcc dp) {
+		apmlog.info(dp.toString());						
+		CDepositAccAns ans = new CDepositAccAns(dp.getRequestid());
+		
+		ans.setClientid(dp.getClientid());
+		ans.setOid(dp.getOid());
+		ans.setPnsgid(dp.getPnsgid());
+		ans.setPnsid(dp.getPnsgid());
+		ans.setQuant(dp.getQuant());
+		ans.setTranid(dp.getTranid());
+		
+		//-----------------
+		DepositAccStatus st = dp.reviewData();
+				
+		if(ComStatus.DepositAccStatus.SUCCESS!=st) {
+			ans.setStatus(st);
+			apmlog.warn(ans.toString());
+			return ans;
+		}
+		
+		try {
+			ans = this.apms
+		}
+		catch(){
+			
+		}
+		
+		
+		//-----------------		
+		apmlog.info(ans.toString());
+		return ans;
+	}
+	
+	@RequestMapping(value = "/withdraw", method = RequestMethod.POST)
+	@ResponseBody
+	public CWithdrawAccAns cWithdrawAcc(@RequestBody CWithdrawAcc wd) {
+		apmlog.info(wd.toString());		
+		CWithdrawAccAns ans = new CWithdrawAccAns(wd.getRequestid());
+		//-----------------
+		
+		//-----------------
+		apmlog.info(ans.toString());		
+		return ans;
+	}
 }

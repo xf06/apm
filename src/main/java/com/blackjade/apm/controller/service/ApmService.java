@@ -11,12 +11,16 @@ import com.blackjade.apm.apis.CDCancel;
 import com.blackjade.apm.apis.CDCancelAns;
 import com.blackjade.apm.apis.CDeal;
 import com.blackjade.apm.apis.CDealAns;
+import com.blackjade.apm.apis.CDepositAcc;
+import com.blackjade.apm.apis.CDepositAccAns;
 import com.blackjade.apm.apis.CPCancel;
 import com.blackjade.apm.apis.CPCancelAns;
 import com.blackjade.apm.apis.CPayConfirm;
 import com.blackjade.apm.apis.CPayConfirmAns;
 import com.blackjade.apm.apis.CPublish;
 import com.blackjade.apm.apis.CPublishAns;
+import com.blackjade.apm.apis.CWithdrawAcc;
+import com.blackjade.apm.apis.CWithdrawAccAns;
 import com.blackjade.apm.apis.ComStatus;
 import com.blackjade.apm.dao.AccDao;
 import com.blackjade.apm.domain.AccRow;
@@ -34,11 +38,11 @@ public class ApmService {
 
 	private String url;
 
-	private String port;
+	//private String port;
 
 	@PostConstruct
 	public void apmInit() throws Exception {
-		this.port = "8112";
+		//this.port = "8112";
 		//this.url = "http://localhost:" + port;
 		this.url = "http://otc-pub/";
 		//this.rest = new RestTemplate();
@@ -527,4 +531,34 @@ public class ApmService {
 		ans.setStatus(ComStatus.PCancelStatus.UNKNOWN);		
 		return ans;
 	}
+	
+	// deposit and withdraw
+	public CDepositAccAns depositAcc(CDepositAcc dp ,CDepositAccAns ans) throws CapiException, Exception{
+
+		AccRow accrow = null;
+		// lock APM
+		try {
+			accrow = this.acc.selectAccRow(dp.getClientid(), dp.getPnsgid(), dp.getPnsid());
+			if (accrow == null) {
+				ans.setStatus(ComStatus.PublishStatus.ACC_DB_EMPTY);
+				return ans;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			ans.setStatus(ComStatus.PublishStatus.ACC_DB_MISS);
+			return ans;
+		}
+		
+		
+		
+		return ans;
+	}
+	
+	public CWithdrawAccAns withdrawAcc(CWithdrawAcc wd ,CWithdrawAccAns ans) throws CapiException, Exception{
+		
+		return ans;
+	}
+	
+	
+	
 }

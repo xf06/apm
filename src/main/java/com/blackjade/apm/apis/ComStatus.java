@@ -153,4 +153,31 @@ public class ComStatus {
 		PNS_STATUS_FINAL,
 		UNKNOWN
 	}
+		
+	public static enum WithdrawAccStatus {
+		SUCCESS,
+		WRONG_MSGID,
+		IN_MSG_ERR,
+		UNKNOWN
+	}
+	
+	public static enum WithdrawOrdStatus{
+		PROCEEDING,
+		SUCCESS,
+		FAILED
+	}
+	
+	public static enum DepositAccStatus{
+		SUCCESS,
+		WRONG_MSGID,
+		IN_MSG_ERR,
+		UNKNOWN
+	}
+	
+	public static enum DepositOrdStatus{
+		PROCEEDING,
+		SUCCESS,
+		FAILED
+	}
+	
 }

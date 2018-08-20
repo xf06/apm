@@ -39,5 +39,15 @@ public interface AccDao {
 	public int updateSPCanAccRow(@Param(value = "cid") int cid, @Param(value = "pnsgid") int pnsgid,
 			@Param(value = "pnsid") int pnsid, @Param(value = "margin") long margin,
 			@Param(value = "freemargin") long freemargin);
+
+	// update for depoist
+	public int updateDepositAccRow();
+	
+	public int updateDepositAccRowConfirm();
+
+	// update for withdraw
+	public int updateWithdrawAccRow();
+	
+	public int updateWithdrawAccRowConfirm();
 	
 }
