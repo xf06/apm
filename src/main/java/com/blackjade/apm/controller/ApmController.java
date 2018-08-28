@@ -30,6 +30,7 @@ import com.blackjade.apm.apis.ComStatus.DepositAccStatus;
 import com.blackjade.apm.apis.ComStatus.PCancelStatus;
 import com.blackjade.apm.apis.ComStatus.PayConfirmStatus;
 import com.blackjade.apm.apis.ComStatus.PublishStatus;
+import com.blackjade.apm.apis.ComStatus.WithdrawAccStatus;
 import com.blackjade.apm.controller.service.ApmService;
 import com.blackjade.apm.dao.AccDao;
 import com.blackjade.apm.exception.CapiException;
@@ -315,6 +316,7 @@ public class ApmController {
 	@RequestMapping(value = "/deposit", method = RequestMethod.POST)
 	@ResponseBody
 	public CDepositAccAns cDepositAcc(@RequestBody CDepositAcc dp) {
+		
 		apmlog.info(dp.toString());						
 		CDepositAccAns ans = new CDepositAccAns(dp.getRequestid());
 		
@@ -324,8 +326,8 @@ public class ApmController {
 		ans.setPnsid(dp.getPnsgid());
 		ans.setQuant(dp.getQuant());
 		ans.setTranid(dp.getTranid());
+		ans.setConlvl(dp.getConlvl());
 		
-		//-----------------
 		DepositAccStatus st = dp.reviewData();
 				
 		if(ComStatus.DepositAccStatus.SUCCESS!=st) {
@@ -335,14 +337,23 @@ public class ApmController {
 		}
 		
 		try {
-			ans = this.apms
+			ans = this.apms.depositAcc(dp, ans);
+			if(ComStatus.DepositAccStatus.SUCCESS!=ans.getStatus()) {
+				apmlog.warn(ans.toString());
+				return ans;
+			}
 		}
-		catch(){
-			
+		catch(CapiException e) {
+			ans.setStatus(ComStatus.DepositAccStatus.valueOf(e.getMessage()));
+			apmlog.warn(ans.toString());
+			return ans;
+		}
+		catch(Exception e) {
+			ans.setStatus(ComStatus.DepositAccStatus.UNKNOWN);
+			apmlog.warn(ans.toString());
+			return ans;
 		}
 		
-		
-		//-----------------		
 		apmlog.info(ans.toString());
 		return ans;
 	}
@@ -353,9 +364,43 @@ public class ApmController {
 		apmlog.info(wd.toString());		
 		CWithdrawAccAns ans = new CWithdrawAccAns(wd.getRequestid());
 		//-----------------
+		ans.setClientid(wd.getClientid());
+		ans.setOid(wd.getOid());
+		ans.setPnsgid(wd.getPnsgid());
+		ans.setPnsid(wd.getPnsid());
+		ans.setQuant(wd.getQuant());
+		ans.setTranid(wd.getTranid());
+		ans.setConlvl(wd.getConlvl());
+		
+		WithdrawAccStatus st = wd.reviewData();
+		
+		if(ComStatus.WithdrawAccStatus.SUCCESS!=st) {
+			ans.setStatus(st);
+			apmlog.warn(ans.toString());
+			return ans;
+		}
+		
+		try {
+			ans = this.apms.withdrawAcc(wd, ans);
+			if(ComStatus.WithdrawAccStatus.SUCCESS!=ans.getStatus()) {
+				apmlog.warn(ans.toString());
+				return ans;
+			}
+		}
+		catch(CapiException e) {
+			ans.setStatus(ComStatus.WithdrawAccStatus.valueOf(e.getMessage()));
+			apmlog.warn(ans.toString());
+			return ans;
+		}
+		catch(Exception e) {
+			ans.setStatus(ComStatus.WithdrawAccStatus.UNKNOWN);
+			apmlog.warn(ans.toString());
+			return ans;
+		}
 		
 		//-----------------
 		apmlog.info(ans.toString());		
 		return ans;
 	}
+
 }

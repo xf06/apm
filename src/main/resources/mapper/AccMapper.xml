@@ -18,13 +18,24 @@
 		UPDATE crm.cacc SET BALANCE=#{balance},MARGIN=#{margin},PNL=#{pnl} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
 	</update>
 
-
 	<update id="updateSDCanAccRow">
 		UPDATE crm.cacc SET MARGIN=#{margin},FREEMARGIN=#{freemargin} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
 	</update>
 
-	<update id="updateSPCanAccRow">
+	<update id="updateDepositAccRow">
+		UPDATE crm.cacc SET BALANCE=#{balance},MARGIN=#{margin},CHANGEBALAN=#{changebalan} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
+	</update>
+
+	<update id="updateDepositAccRowConfirm">
 		UPDATE crm.cacc SET MARGIN=#{margin},FREEMARGIN=#{freemargin} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
+	</update>
+
+	<update id="updateWithdrawAccRow">
+		UPDATE crm.cacc SET MARGIN=#{margin},FREEMARGIN=#{freemargin} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
+	</update>
+	
+	<update id="updateWithdrawAccRowConfirm">
+		UPDATE crm.cacc SET BALANCE=#{balance},MARGIN=#{margin},CHANGEBALAN=#{changebalan} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
 	</update>
 
 </mapper>

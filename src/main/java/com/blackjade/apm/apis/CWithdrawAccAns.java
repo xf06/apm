@@ -16,8 +16,9 @@ public class CWithdrawAccAns {
 	private int pnsid;
 	private int pnsgid;
 	private long quant;
-	private WithdrawAccStatus status;
+	private String tranid;
 	private WithdrawOrdStatus conlvl;
+	private WithdrawAccStatus status;
 	
 	public CWithdrawAccAns() {		
 	}
@@ -82,21 +83,29 @@ public class CWithdrawAccAns {
 	public void setQuant(long quant) {
 		this.quant = quant;
 	}
-
-	public WithdrawAccStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(WithdrawAccStatus status) {
-		this.status = status;
-	}
 	
+	public String getTranid() {
+		return tranid;
+	}
+
+	public void setTranid(String tranid) {
+		this.tranid = tranid;
+	}
+
 	public WithdrawOrdStatus getConlvl() {
 		return conlvl;
 	}
 
 	public void setConlvl(WithdrawOrdStatus conlvl) {
 		this.conlvl = conlvl;
+	}
+	
+	public WithdrawAccStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(WithdrawAccStatus status) {
+		this.status = status;
 	}
 
 	@Override

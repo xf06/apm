@@ -160,6 +160,9 @@ public class ComStatus {
 		IN_MSG_ERR,
 		MISS_ACC_DB,
 		MISS_ACC_DB_EX,
+		MISS_ORD_DB,
+		WRONG_ORD_STATUS,
+		WRONG_ORD_QUANT,
 		UNKNOWN
 	}
 	
@@ -168,20 +171,27 @@ public class ComStatus {
 		WRONG_MSGID,
 		IN_MSG_ERR,
 		MISS_ACC_DB,
-		MISS_ACC_DB_EX,
+		MISS_ACC_DB_EX,		
+		MISS_ORD_DB,
+		WRONG_ORD_STATUS,
+		WRONG_ORD_QUANT,
 		UNKNOWN
 	}
-		
+
 	public static enum WithdrawOrdStatus{
 		PROCEEDING,
 		SUCCESS,
-		FAILED
+		FAILED,
+		REJECT,
+		UNKNOWN
 	}
 	
 	public static enum DepositOrdStatus{
 		PROCEEDING,
 		SUCCESS,
-		FAILED
+		FAILED,
+		REJECT,
+		UNKNOWN
 	}
 	
 }
