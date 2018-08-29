@@ -38,4 +38,8 @@
 		UPDATE crm.cacc SET BALANCE=#{balance},MARGIN=#{margin},CHANGEBALAN=#{changebalan} WHERE CID=#{cid} AND PNSGID=#{pnsgid} AND PNSID=#{pnsid};
 	</update>
 
+<!-- 	<select id="selectOrdRow" resultType="com.blackjade.apm.domain.OrdRow"> -->
+<!-- 		SELECT * FROM pns.inout a WHERE a.OID=#{oid} AND a.CID=#{cid} AND a.PNSGID=#{pnsgid} AND a.PNSID=#{pnsid} AND a.SIDE=#{side}		 -->
+<!-- 	</select> -->
+	
 </mapper>

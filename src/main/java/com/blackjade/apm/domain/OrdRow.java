@@ -9,6 +9,7 @@ public class OrdRow {
 	private int pnsgid;
 	private int pnsid;
 	private long quant;
+	private String tranid;
 	private String status;
 
 	public long getTimestamp() {
@@ -65,6 +66,14 @@ public class OrdRow {
 
 	public void setQuant(long quant) {
 		this.quant = quant;
+	}
+	
+	public String getTranid() {
+		return tranid;
+	}
+
+	public void setTranid(String tranid) {
+		this.tranid = tranid;
 	}
 
 	public String getStatus() {

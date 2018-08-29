@@ -323,7 +323,7 @@ public class ApmController {
 		ans.setClientid(dp.getClientid());
 		ans.setOid(dp.getOid());
 		ans.setPnsgid(dp.getPnsgid());
-		ans.setPnsid(dp.getPnsgid());
+		ans.setPnsid(dp.getPnsid());
 		ans.setQuant(dp.getQuant());
 		ans.setTranid(dp.getTranid());
 		ans.setConlvl(dp.getConlvl());
@@ -349,6 +349,7 @@ public class ApmController {
 			return ans;
 		}
 		catch(Exception e) {
+			e.printStackTrace();
 			ans.setStatus(ComStatus.DepositAccStatus.UNKNOWN);
 			apmlog.warn(ans.toString());
 			return ans;

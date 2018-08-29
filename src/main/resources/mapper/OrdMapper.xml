@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.blackjade.apm.dao.AccDao">
+<mapper namespace="com.blackjade.apm.dao.OrdDao">
 
 	<select id="selectOrdRow" resultType="com.blackjade.apm.domain.OrdRow">
-		SELECT * FROM pns.inout a WHERE a.OID=#{OID} AND a.CID=#{cid} AND a.PNSGID=#{pnsgid} AND a.PNSID=#{pnsid} AND a.SIDE=#{side}		
+		SELECT * FROM pns.inout a WHERE a.OID=#{oid} AND a.CID=#{cid} AND a.PNSGID=#{pnsgid} AND a.PNSID=#{pnsid} AND a.SIDE=#{side}		
 	</select>
 	
 	<insert id="insertOrdRow" parameterType="com.blackjade.apm.domain.OrdRow">
 		INSERT INTO pns.inout (TIMESTAMP,OID,CID,SIDE,PNSGID,PNSID,QUANT,TRANID,STATUS) VALUES 
-		(#{timestamp},#{oid},#{cid},#{side},#{pnsgid},#{pnsid},#{quant},#{status})	
+		(#{timestamp},#{oid},#{cid},#{side},#{pnsgid},#{pnsid},#{quant},#{tranid},#{status})	
 	</insert>
 
 	<update id="updateDepositOrdRow">
-		UPDATE pns.inout a SET a.STATUS=#{status} WHERE a.TIMESTAMP=#{timestamp},a.OID=#{oid},a.CID=#{cid},
-		a.SIDE=#{side},a.PNSGID=#{pnsgid},a.PNSID=#{pnsid},a.QUANT=#{quant},a.tranid=#{TRANID};
+		UPDATE pns.inout a SET a.STATUS=#{status} WHERE a.TIMESTAMP=#{timestamp} AND a.OID=#{oid} AND a.CID=#{cid} AND
+		a.SIDE=#{side} AND a.PNSGID=#{pnsgid} AND a.PNSID=#{pnsid} AND a.QUANT=#{quant} AND a.tranid=#{tranid};
 	</update>
 	
 	<update id="updateWithdrawOrdRow">
-		UPDATE pns.inout a SET a.STATUS=#{status} WHERE a.TIMESTAMP=#{timestamp},a.OID=#{oid},a.CID=#{cid},
-		a.SIDE=#{side},a.PNSGID=#{pnsgid},a.PNSID=#{pnsid},a.QUANT=#{quant},a.tranid=#{TRANID};
+		UPDATE pns.inout a SET a.STATUS=#{status} WHERE a.TIMESTAMP=#{timestamp} AND a.OID=#{oid} AND a.CID=#{cid} AND
+		a.SIDE=#{side} AND a.PNSGID=#{pnsgid} AND a.PNSID=#{pnsid} AND a.QUANT=#{quant} AND a.tranid=#{trainid};
 	</update>
 	
 </mapper>

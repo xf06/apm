@@ -21,7 +21,7 @@ public class CDepositAcc {
 
 	public DepositAccStatus reviewData() {
 
-		if (!this.messageid.equals("7105"))
+		if ((this.messageid==null)||(!this.messageid.equals("7103")))
 			return ComStatus.DepositAccStatus.WRONG_MSGID;
 
 		if (this.requestid == null)

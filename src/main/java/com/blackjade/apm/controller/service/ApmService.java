@@ -23,6 +23,7 @@ import com.blackjade.apm.apis.CWithdrawAcc;
 import com.blackjade.apm.apis.CWithdrawAccAns;
 import com.blackjade.apm.apis.ComStatus;
 import com.blackjade.apm.dao.AccDao;
+import com.blackjade.apm.dao.OrdDao;
 import com.blackjade.apm.domain.AccRow;
 import com.blackjade.apm.domain.OrdRow;
 import com.blackjade.apm.exception.CapiException;
@@ -33,6 +34,9 @@ public class ApmService {
 
 	@Autowired
 	private AccDao acc;
+	
+	@Autowired
+	private OrdDao ord;
 	
 	@Autowired
 	private RestTemplate rest;
@@ -536,8 +540,16 @@ public class ApmService {
 	// deposit and withdraw
 	public CDepositAccAns depositAcc(CDepositAcc dp, CDepositAccAns ans) throws CapiException, Exception{
 
-		// first check inout order status		
-		OrdRow ordrow = this.acc.selectOrdRow(dp.getOid().toString(), dp.getClientid(), dp.getPnsgid(), dp.getPnsid(), "D");
+		// first check inout order status
+		OrdRow ordrow = null;
+		try {
+			ordrow = this.ord.selectOrdRow(dp.getOid().toString(), dp.getClientid(), dp.getPnsgid(), dp.getPnsid(), "D");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			ans.setStatus(ComStatus.DepositAccStatus.MISS_ORD_DB);
+			return ans;
+		}
 		
 		// SUCCESS or FAILED status 
 		if(ComStatus.DepositOrdStatus.PROCEEDING!=dp.getConlvl()) {
@@ -575,13 +587,37 @@ public class ApmService {
 			// proceeding -> success			
 			if(ComStatus.DepositOrdStatus.SUCCESS==dp.getConlvl()) {				
 				ordrow.setStatus(ComStatus.DepositOrdStatus.SUCCESS.toString());
-				this.acc.updateDepositOrdRow(ordrow);
+				int cv = 0;
+				try {
+					cv = this.ord.updateDepositOrdRow(ordrow);
+					if(cv==0) {
+						ans.setStatus(ComStatus.DepositAccStatus.MISS_ORD_DB);
+						return ans;
+					}
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+					ans.setStatus(ComStatus.DepositAccStatus.MISS_ORD_DB);
+					return ans;
+				}
 			}
 			
 			// proceeding -> failed
 			if(ComStatus.DepositOrdStatus.FAILED==dp.getConlvl()) {
 				ordrow.setStatus(ComStatus.DepositOrdStatus.FAILED.toString());
-				this.acc.updateDepositOrdRow(ordrow);
+				int cv = 0;
+				try{
+					cv = this.ord.updateDepositOrdRow(ordrow);
+					if(cv==0) {
+						ans.setStatus(ComStatus.DepositAccStatus.MISS_ORD_DB);
+						return ans;
+					}
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+					ans.setStatus(ComStatus.DepositAccStatus.MISS_ORD_DB);
+					return ans;
+				}
 			}
 			
 		}
@@ -594,17 +630,19 @@ public class ApmService {
 			
 			ordrow = new OrdRow();
 			ordrow.setTimestamp(System.currentTimeMillis());
+			ordrow.setOid(dp.getOid().toString());
 			ordrow.setCid(dp.getClientid());
 			ordrow.setSide('D');
 			ordrow.setPnsgid(dp.getPnsgid());
 			ordrow.setPnsid(dp.getPnsid());
 			ordrow.setQuant(dp.getQuant());
+			ordrow.setTranid(dp.getTranid());
 			ordrow.setStatus(dp.getConlvl().toString());
 			
 			int cv = 0;
 			// insert order into inout row
 			try {
-				cv = this.acc.insertOrdRow(ordrow);
+				cv = this.ord.insertOrdRow(ordrow);
 				if(cv==0) {
 					ans.setStatus(ComStatus.DepositAccStatus.MISS_ORD_DB);
 					return ans;
@@ -719,9 +757,17 @@ public class ApmService {
 	}
 	
 	public CWithdrawAccAns withdrawAcc(CWithdrawAcc wd ,CWithdrawAccAns ans) throws CapiException, Exception{
-		// first check inout order status		
-		OrdRow ordrow = this.acc.selectOrdRow(wd.getOid().toString(), wd.getClientid(), wd.getPnsgid(), wd.getPnsid(), "W");
 		
+		// first check inout order status		
+		OrdRow ordrow = null;
+		try {
+			ordrow = this.ord.selectOrdRow(wd.getOid().toString(), wd.getClientid(), wd.getPnsgid(), wd.getPnsid(), "W");
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
+			return ans;
+		}
 		//# ORD UPDATE #
 		// SUCCESS or FAILED
 		if(ComStatus.WithdrawOrdStatus.PROCEEDING!=wd.getConlvl()) {
@@ -759,13 +805,13 @@ public class ApmService {
 			// PROCEEDING -> SUCCESS
 			if(ComStatus.WithdrawOrdStatus.SUCCESS==wd.getConlvl()) {				
 				ordrow.setStatus(ComStatus.WithdrawOrdStatus.SUCCESS.toString());
-				this.acc.updateWithdrawOrdRow(ordrow);
+				this.ord.updateWithdrawOrdRow(ordrow);
 			}
 			
 			// PROCEEDING -> FAILED
 			if(ComStatus.WithdrawOrdStatus.FAILED==wd.getConlvl()) {
 				ordrow.setStatus(ComStatus.WithdrawOrdStatus.FAILED.toString());
-				this.acc.updateWithdrawOrdRow(ordrow);
+				this.ord.updateWithdrawOrdRow(ordrow);
 			}
 			
 		}
@@ -789,7 +835,7 @@ public class ApmService {
 			// insert order into inout row
 			try {
 				// this need to be done after or changed to be after
-				cv = this.acc.insertOrdRow(ordrow);
+				cv = this.ord.insertOrdRow(ordrow);
 				if(cv==0) {
 					ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
 					return ans;
@@ -831,7 +877,7 @@ public class ApmService {
 			int cv=0;
 			ordrow.setStatus(ComStatus.WithdrawOrdStatus.UNKNOWN.toString());
 			try {
-				cv = this.acc.insertOrdRow(ordrow);
+				cv = this.ord.insertOrdRow(ordrow);
 				if(cv==0) {
 					// should be exception instead
 					ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
@@ -850,7 +896,7 @@ public class ApmService {
 			int cv = 0;
 			ordrow.setStatus(ComStatus.WithdrawOrdStatus.REJECT.toString());
 			try {
-				cv = this.acc.insertOrdRow(ordrow);
+				cv = this.ord.insertOrdRow(ordrow);
 				if(cv==0) {
 					// should be exception instead
 					ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
