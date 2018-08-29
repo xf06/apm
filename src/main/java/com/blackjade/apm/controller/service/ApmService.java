@@ -804,15 +804,41 @@ public class ApmService {
 			
 			// PROCEEDING -> SUCCESS
 			if(ComStatus.WithdrawOrdStatus.SUCCESS==wd.getConlvl()) {				
-				ordrow.setStatus(ComStatus.WithdrawOrdStatus.SUCCESS.toString());
-				this.ord.updateWithdrawOrdRow(ordrow);
+				ordrow.setStatus(ComStatus.WithdrawOrdStatus.SUCCESS.toString());				
+				int cv=0;
+				try {
+					cv = this.ord.updateWithdrawOrdRow(ordrow);
+					if(cv==0) 
+					{
+						ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
+						return ans;						
+					}
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+					ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
+					return ans;	
+				}	
 			}
 			
 			// PROCEEDING -> FAILED
 			if(ComStatus.WithdrawOrdStatus.FAILED==wd.getConlvl()) {
 				ordrow.setStatus(ComStatus.WithdrawOrdStatus.FAILED.toString());
-				this.ord.updateWithdrawOrdRow(ordrow);
+				try {
+					int cv=0;
+					cv = this.ord.updateWithdrawOrdRow(ordrow);
+					if(cv==0){
+						ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
+						return ans;
+					}
+				}
+				catch(Exception e) {
+					e.printStackTrace();
+					ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
+					return ans;
+				}
 			}
+			
 			
 		}
 		else // PROCEEDING // need to check if ACC has enough 
@@ -825,10 +851,12 @@ public class ApmService {
 			ordrow = new OrdRow();
 			ordrow.setTimestamp(System.currentTimeMillis());
 			ordrow.setCid(wd.getClientid());
+			ordrow.setOid(wd.getOid().toString());
 			ordrow.setSide('W');
 			ordrow.setPnsgid(wd.getPnsgid());
 			ordrow.setPnsid(wd.getPnsid());
 			ordrow.setQuant(wd.getQuant());
+			ordrow.setTranid(wd.getTranid());
 			ordrow.setStatus(wd.getConlvl().toString());
 			
 			int cv = 0;

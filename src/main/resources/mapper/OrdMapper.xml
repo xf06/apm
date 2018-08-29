@@ -18,7 +18,7 @@
 	
 	<update id="updateWithdrawOrdRow">
 		UPDATE pns.inout a SET a.STATUS=#{status} WHERE a.TIMESTAMP=#{timestamp} AND a.OID=#{oid} AND a.CID=#{cid} AND
-		a.SIDE=#{side} AND a.PNSGID=#{pnsgid} AND a.PNSID=#{pnsid} AND a.QUANT=#{quant} AND a.tranid=#{trainid};
+		a.SIDE=#{side} AND a.PNSGID=#{pnsgid} AND a.PNSID=#{pnsid} AND a.QUANT=#{quant} AND a.tranid=#{tranid};
 	</update>
 	
 </mapper>
