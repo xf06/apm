@@ -111,7 +111,8 @@ public class CWithdrawAcc {
 	@Override
 	public String toString() {
 		return "CWithdrawAcc [messageid=" + messageid + ", requestid=" + requestid + ", clientid=" + clientid + ", oid="
-				+ oid + ", pnsid=" + pnsid + ", pnsgid=" + pnsgid + ", quant=" + quant + ", tranid=" + tranid + "]";
+				+ oid + ", pnsid=" + pnsid + ", pnsgid=" + pnsgid + ", quant=" + quant + ", tranid=" + tranid
+				+ ", conlvl=" + conlvl + "]";
 	}
 
 }

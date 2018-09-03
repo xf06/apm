@@ -863,7 +863,7 @@ public class ApmService {
 			// insert order into inout row
 			try {
 				// this need to be done after or changed to be after
-				cv = this.ord.insertOrdRow(ordrow);
+				cv = this.ord.insertOrdRow(ordrow);///*************//bug//
 				if(cv==0) {
 					ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
 					return ans;
@@ -905,7 +905,8 @@ public class ApmService {
 			int cv=0;
 			ordrow.setStatus(ComStatus.WithdrawOrdStatus.UNKNOWN.toString());
 			try {
-				cv = this.ord.insertOrdRow(ordrow);
+				//cv = this.ord.insertOrdRow(ordrow); //
+				cv = this.ord.updateWithdrawOrdRow(ordrow);
 				if(cv==0) {
 					// should be exception instead
 					ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
@@ -924,7 +925,8 @@ public class ApmService {
 			int cv = 0;
 			ordrow.setStatus(ComStatus.WithdrawOrdStatus.REJECT.toString());
 			try {
-				cv = this.ord.insertOrdRow(ordrow);
+				//cv = this.ord.insertOrdRow(ordrow); // - //
+				cv = this.ord.updateWithdrawOrdRow(ordrow);
 				if(cv==0) {
 					// should be exception instead
 					ans.setStatus(ComStatus.WithdrawAccStatus.MISS_ORD_DB);
