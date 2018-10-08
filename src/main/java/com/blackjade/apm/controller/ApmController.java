@@ -48,56 +48,58 @@ public class ApmController {
 	
 	private static final Logger apmlog = LogManager.getLogger(ApmController.class.getName()); 
 	
-	@RequestMapping(value = "/cdepositupdate", method = RequestMethod.POST)
-	@ResponseBody
-	public CDepositUpdateAns cDepositUpdate(@RequestBody CDepositUpdate du) {			
-
-		apmlog.info(du.toString());						
-		CDepositUpdateAns ans = new CDepositUpdateAns(du.getRequestid());
-		
-		ans.setClientid(du.getClientid());
-		ans.setOid(du.getOid());
-		ans.setPnsgid(du.getPnsgid());
-		ans.setPnsid(du.getPnsid());
-		ans.setQuant(du.getQuant());
-		ans.setTransactionid(du.getTransactionid());
-		ans.setConlvl(du.getConlvl());
-		ans.setRcvquant(du.getRcvquant());
-		ans.setFees(du.getFees());
-
-		/*
-		DepositAccStatus st = dp.reviewData();
-				
-		if(ComStatus.DepositAccStatus.SUCCESS!=st) {
-			ans.setStatus(st);
-			apmlog.warn(ans.toString());
-			return ans;
-		}
-		
-		try {
-			ans = this.apms.depositAcc(dp, ans);
-			if(ComStatus.DepositAccStatus.SUCCESS!=ans.getStatus()) {
-				apmlog.warn(ans.toString());
-				return ans;
-			}
-		}
-		catch(CapiException e) {
-			ans.setStatus(ComStatus.DepositAccStatus.valueOf(e.getMessage()));
-			apmlog.warn(ans.toString());
-			return ans;
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			ans.setStatus(ComStatus.DepositAccStatus.UNKNOWN);
-			apmlog.warn(ans.toString());
-			return ans;
-		}
-		*/
-		
-		ans.setStatus(ComStatus.DepositAccStatus.SUCCESS);
-		apmlog.info(ans.toString());
-		return ans;
-	}
+//	
+//	
+//	@RequestMapping(value = "/cdepositupdate", method = RequestMethod.POST)
+//	@ResponseBody
+//	public CDepositUpdateAns cDepositUpdate(@RequestBody CDepositUpdate du) {			
+//
+//		apmlog.info(du.toString());						
+//		CDepositUpdateAns ans = new CDepositUpdateAns(du.getRequestid());
+//		
+//		ans.setClientid(du.getClientid());
+//		ans.setOid(du.getOid());
+//		ans.setPnsgid(du.getPnsgid());
+//		ans.setPnsid(du.getPnsid());
+//		ans.setQuant(du.getQuant());
+//		ans.setTransactionid(du.getTransactionid());
+//		ans.setConlvl(du.getConlvl());
+//		ans.setRcvquant(du.getRcvquant());
+//		ans.setFees(du.getFees());
+//
+//		/*
+//		DepositAccStatus st = dp.reviewData();
+//				
+//		if(ComStatus.DepositAccStatus.SUCCESS!=st) {
+//			ans.setStatus(st);
+//			apmlog.warn(ans.toString());
+//			return ans;
+//		}
+//		
+//		try {
+//			ans = this.apms.depositAcc(dp, ans);
+//			if(ComStatus.DepositAccStatus.SUCCESS!=ans.getStatus()) {
+//				apmlog.warn(ans.toString());
+//				return ans;
+//			}
+//		}
+//		catch(CapiException e) {
+//			ans.setStatus(ComStatus.DepositAccStatus.valueOf(e.getMessage()));
+//			apmlog.warn(ans.toString());
+//			return ans;
+//		}
+//		catch(Exception e) {
+//			e.printStackTrace();
+//			ans.setStatus(ComStatus.DepositAccStatus.UNKNOWN);
+//			apmlog.warn(ans.toString());
+//			return ans;
+//		}
+//		*/
+//		
+//		ans.setStatus(ComStatus.DepositAccStatus.SUCCESS);
+//		apmlog.info(ans.toString());
+//		return ans;
+//	}
 	
 	
 	@RequestMapping(value = "/publish", method = RequestMethod.POST)
