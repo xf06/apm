@@ -14,6 +14,7 @@ public class AccRow {
 	private long prebalan;
 	private long changebalan;
 	private long pnl;
+	private String cnetadd; // coin net addresss
 
 	public int getCid() {
 		return cid;
@@ -95,6 +96,12 @@ public class AccRow {
 		this.pnl = pnl;
 	}
 
+	public String getCnetadd() {
+		return cnetadd;
+	}
+
+	public void setCnetadd(String cnetadd) {
+		this.cnetadd = cnetadd;
+	}
+
 }
-
-
